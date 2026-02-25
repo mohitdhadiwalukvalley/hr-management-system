@@ -1,0 +1,7 @@
+export { default as Dashboard } from './Dashboard';
+export { default as PlaceholderPage } from './PlaceholderPage';
+export { default as Departments } from './Departments';
+export { default as Employees } from './Employees';
+export { default as EmployeeDetail } from './EmployeeDetail';
+export { default as Attendance } from './Attendance';
+export { default as Leaves } from './Leaves';
