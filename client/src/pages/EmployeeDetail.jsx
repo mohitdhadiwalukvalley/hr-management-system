@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
-import { employeeService } from '../../services/employeeService';
-import { Button, LoadingSpinner } from '../common';
-import { useAuth } from '../../context/AuthContext';
+import { employeeService } from '../services/employeeService';
+import { Button, LoadingSpinner } from '../components/common';
+import { useAuth } from '../context/AuthContext';
 
 const EmployeeDetail = () => {
   const { id } = useParams();

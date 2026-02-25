@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
-import { departmentService } from '../../services/departmentService';
-import { Button, Input, LoadingSpinner } from '../common';
+import { departmentService } from '../services/departmentService';
+import { Button, Input, LoadingSpinner } from '../components/common';
 
 const Departments = () => {
   const [departments, setDepartments] = useState([]);

@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
-import { employeeService } from '../../services/employeeService';
-import { departmentService } from '../../services/departmentService';
-import { Button, Input, LoadingSpinner } from '../common';
-import { useAuth } from '../../context/AuthContext';
+import { employeeService } from '../services/employeeService';
+import { departmentService } from '../services/departmentService';
+import { Button, Input, LoadingSpinner } from '../components/common';
+import { useAuth } from '../context/AuthContext';
 
 const Employees = () => {
   const [employees, setEmployees] = useState([]);

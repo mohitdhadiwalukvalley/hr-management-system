@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
-import { attendanceService } from '../../services/attendanceService';
-import { employeeService } from '../../services/employeeService';
-import { departmentService } from '../../services/departmentService';
-import { Button, Input, LoadingSpinner } from '../common';
-import { useAuth } from '../../context/AuthContext';
+import { attendanceService } from '../services/attendanceService';
+import { employeeService } from '../services/employeeService';
+import { departmentService } from '../services/departmentService';
+import { Button, Input, LoadingSpinner } from '../components/common';
+import { useAuth } from '../context/AuthContext';
 
 const Attendance = () => {
   const [attendance, setAttendance] = useState([]);

@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
-import { leaveService } from '../../services/leaveService';
-import { employeeService } from '../../services/employeeService';
-import { Button, Input, LoadingSpinner } from '../common';
-import { useAuth } from '../../context/AuthContext';
+import { leaveService } from '../services/leaveService';
+import { employeeService } from '../services/employeeService';
+import { Button, Input, LoadingSpinner } from '../components/common';
+import { useAuth } from '../context/AuthContext';
 
 const Leaves = () => {
   const [leaves, setLeaves] = useState([]);
