@@ -155,7 +155,7 @@ const Attendance = () => {
             <select
               value={filters.department}
               onChange={(e) => setFilters({ ...filters, department: e.target.value })}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="">All Departments</option>
               {departments.map((dept) => (
@@ -168,7 +168,7 @@ const Attendance = () => {
             <select
               value={filters.status}
               onChange={(e) => setFilters({ ...filters, status: e.target.value })}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="">All Status</option>
               <option value="present">Present</option>
@@ -278,7 +278,7 @@ const Attendance = () => {
                 <select
                   value={markingData.employee}
                   onChange={(e) => setMarkingData({ ...markingData, employee: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   required
                 >
                   <option value="">Select Employee</option>
@@ -301,7 +301,7 @@ const Attendance = () => {
                 <select
                   value={markingData.status}
                   onChange={(e) => setMarkingData({ ...markingData, status: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                   <option value="present">Present</option>
                   <option value="absent">Absent</option>
@@ -328,7 +328,7 @@ const Attendance = () => {
                 <textarea
                   value={markingData.notes}
                   onChange={(e) => setMarkingData({ ...markingData, notes: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   rows={2}
                 />
               </div>
