@@ -232,9 +232,11 @@ const Employees = () => {
                 placeholder="Search employees..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-lg text-sm
+                className="w-full pl-10 pr-4 py-2.5 border border-gray-200 dark:border-gray-600 rounded-lg text-sm
                          focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
-                         hover:border-gray-300 transition-all"
+                         hover:border-gray-300 dark:hover:border-gray-500 transition-all
+                         bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
+                         placeholder-gray-400 dark:placeholder-gray-500"
               />
             </div>
             <select

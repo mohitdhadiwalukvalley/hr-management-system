@@ -56,7 +56,7 @@ const Dashboard = () => {
           totalEmployees: employees.length,
           departments: depts.length,
           presentToday: attendance.filter(a => a.status === 'present' || a.status === 'working' || a.currentState === 'working').length,
-          pendingLeaves: leaves.length,
+          absentToday: attendance.filter(a => a.status === 'absent').length,
         });
       } else {
         // Employee: Fetch only own data
