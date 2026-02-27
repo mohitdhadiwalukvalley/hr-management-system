@@ -213,10 +213,10 @@ const Dashboard = () => {
 
   const getColorClasses = (color) => {
     const colors = {
-      blue: 'bg-blue-50 text-blue-600 hover:bg-blue-100 border-blue-200',
-      emerald: 'bg-emerald-50 text-emerald-600 hover:bg-emerald-100 border-emerald-200',
-      purple: 'bg-purple-50 text-purple-600 hover:bg-purple-100 border-purple-200',
-      amber: 'bg-amber-50 text-amber-600 hover:bg-amber-100 border-amber-200',
+      blue: 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/50 border-blue-200 dark:border-blue-700',
+      emerald: 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-900/50 border-emerald-200 dark:border-emerald-700',
+      purple: 'bg-purple-50 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 hover:bg-purple-100 dark:hover:bg-purple-900/50 border-purple-200 dark:border-purple-700',
+      amber: 'bg-amber-50 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 hover:bg-amber-100 dark:hover:bg-amber-900/50 border-amber-200 dark:border-amber-700',
     };
     return colors[color] || colors.blue;
   };
@@ -254,7 +254,7 @@ const Dashboard = () => {
         {/* Quick Actions for Employee */}
         <Card>
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-gray-900">Quick Actions</h2>
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 dark:text-gray-100">Quick Actions</h2>
           </div>
           <div className="grid grid-cols-3 gap-3">
             {employeeQuickActions.map((action) => (
@@ -275,7 +275,7 @@ const Dashboard = () => {
         {/* My Leaves */}
         <Card>
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-gray-900">My Leave Requests</h2>
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 dark:text-gray-100">My Leave Requests</h2>
             <a href="/leaves" className="text-sm text-blue-600 hover:text-blue-700 font-medium">
               View all
             </a>
@@ -285,11 +285,11 @@ const Dashboard = () => {
               {myLeaves.map((leave) => (
                 <div
                   key={leave._id}
-                  className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                  className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg"
                 >
                   <div>
-                    <p className="text-sm font-medium text-gray-900">{leave.leaveType}</p>
-                    <p className="text-xs text-gray-500">{leave.days} day(s)</p>
+                    <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{leave.leaveType}</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">{leave.days} day(s)</p>
                   </div>
                   <Badge variant={leave.status === 'pending' ? 'warning' : leave.status === 'approved' ? 'success' : 'danger'}>
                     {leave.status}
@@ -298,7 +298,7 @@ const Dashboard = () => {
               ))}
             </div>
           ) : (
-            <div className="text-center py-8 text-gray-500">
+            <div className="text-center py-8 text-gray-500 dark:text-gray-400">
               <svg className="w-12 h-12 mx-auto text-gray-300 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
               </svg>
@@ -407,7 +407,7 @@ const Dashboard = () => {
       {/* Quick Actions for Admin/HR */}
       <Card>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold text-gray-900">Quick Actions</h2>
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Quick Actions</h2>
         </div>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
           {quickActions.map((action) => (
@@ -428,7 +428,7 @@ const Dashboard = () => {
       {/* Today's Employee Attendance Table */}
       <Card>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold text-gray-900">Today's Attendance</h2>
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Today's Attendance</h2>
           <a href="/attendance" className="text-sm text-blue-600 hover:text-blue-700 font-medium">
             View Details
           </a>
@@ -454,8 +454,8 @@ const Dashboard = () => {
             </div>
             <div className="text-xs text-blue-700">Checked Out</div>
           </div>
-          <div className="bg-gray-50 rounded-lg p-3 text-center">
-            <div className="text-2xl font-bold text-gray-600">
+          <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-3 text-center">
+            <div className="text-2xl font-bold text-gray-600 dark:text-gray-300">
               {employeeAttendanceData.filter(e => !e.attendance || e.attendance?.currentState === 'not_checked_in').length}
             </div>
             <div className="text-xs text-gray-700">Not Checked In</div>
@@ -472,28 +472,28 @@ const Dashboard = () => {
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="bg-gray-50 border-b border-gray-200">
-                <th className="text-left py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider">Employee</th>
-                <th className="text-left py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider">Status</th>
-                <th className="text-left py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider">Check In</th>
-                <th className="text-left py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider">Check Out</th>
-                <th className="text-left py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider">Working Hours</th>
-                <th className="text-left py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider">Break Time</th>
+              <tr className="bg-gray-50 dark:bg-gray-800 border-b border-gray-200">
+                <th className="text-left py-3 px-4 text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Employee</th>
+                <th className="text-left py-3 px-4 text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Status</th>
+                <th className="text-left py-3 px-4 text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Check In</th>
+                <th className="text-left py-3 px-4 text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Check Out</th>
+                <th className="text-left py-3 px-4 text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Working Hours</th>
+                <th className="text-left py-3 px-4 text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Break Time</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
               {employeeAttendanceData.slice(0, 10).map((emp) => (
-                <tr key={emp._id} className="hover:bg-gray-50 transition-colors">
+                <tr key={emp._id} className="hover:bg-gray-50 dark:bg-gray-800 transition-colors">
                   <td className="py-3 px-4">
                     <div className="flex items-center gap-3">
                       <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center text-white text-xs font-medium">
                         {emp.firstName?.[0]}{emp.lastName?.[0]}
                       </div>
                       <div>
-                        <div className="text-sm font-medium text-gray-900">
+                        <div className="text-sm font-medium text-gray-900 dark:text-gray-100">
                           {emp.firstName} {emp.lastName}
                         </div>
-                        <div className="text-xs text-gray-500">{emp.employeeId}</div>
+                        <div className="text-xs text-gray-500 dark:text-gray-400">{emp.employeeId}</div>
                       </div>
                     </div>
                   </td>
@@ -514,22 +514,22 @@ const Dashboard = () => {
                     </div>
                   </td>
                   <td className="py-3 px-4">
-                    <span className="text-sm text-gray-900 font-mono">
+                    <span className="text-sm text-gray-900 dark:text-gray-100 font-mono">
                       {emp.attendance?.checkIn ? formatTime(emp.attendance.checkIn) : '--:--:--'}
                     </span>
                   </td>
                   <td className="py-3 px-4">
-                    <span className="text-sm text-gray-900 font-mono">
+                    <span className="text-sm text-gray-900 dark:text-gray-100 font-mono">
                       {emp.attendance?.checkOut ? formatTime(emp.attendance.checkOut) : '--:--:--'}
                     </span>
                   </td>
                   <td className="py-3 px-4">
-                    <span className="text-sm text-gray-900 font-medium">
+                    <span className="text-sm text-gray-900 dark:text-gray-100 font-medium">
                       {emp.attendance ? formatWorkingHours(calculateCurrentWorkingMinutes(emp.attendance)) : '0h 0m'}
                     </span>
                   </td>
                   <td className="py-3 px-4">
-                    <span className="text-sm text-gray-600">
+                    <span className="text-sm text-gray-600 dark:text-gray-300">
                       {emp.attendance?.totalBreakMinutes ? formatWorkingHours(emp.attendance.totalBreakMinutes) : '0h 0m'}
                     </span>
                   </td>
@@ -548,7 +548,7 @@ const Dashboard = () => {
         )}
 
         {employeeAttendanceData.length === 0 && (
-          <div className="text-center py-8 text-gray-500">
+          <div className="text-center py-8 text-gray-500 dark:text-gray-400">
             <svg className="w-12 h-12 mx-auto text-gray-300 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
             </svg>
@@ -562,7 +562,7 @@ const Dashboard = () => {
         {/* Pending Leave Requests */}
         <Card>
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-gray-900">Pending Leave Requests</h2>
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Pending Leave Requests</h2>
             <a href="/leaves" className="text-sm text-blue-600 hover:text-blue-700 font-medium">
               View all
             </a>
@@ -572,17 +572,17 @@ const Dashboard = () => {
               {recentLeaves.map((leave) => (
                 <div
                   key={leave._id}
-                  className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                  className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg hover:bg-gray-100 transition-colors"
                 >
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center text-white font-medium text-sm">
                       {leave.employee?.firstName?.[0] || leave.employee?.email?.[0] || '?'}
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-gray-900">
+                      <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
                         {leave.employee?.firstName} {leave.employee?.lastName}
                       </p>
-                      <p className="text-xs text-gray-500">
+                      <p className="text-xs text-gray-500 dark:text-gray-400">
                         {leave.leaveType} - {leave.days} day(s)
                       </p>
                     </div>
@@ -592,7 +592,7 @@ const Dashboard = () => {
               ))}
             </div>
           ) : (
-            <div className="text-center py-8 text-gray-500">
+            <div className="text-center py-8 text-gray-500 dark:text-gray-400">
               <svg className="w-12 h-12 mx-auto text-gray-300 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
               </svg>
@@ -604,7 +604,7 @@ const Dashboard = () => {
         {/* Department Overview */}
         <Card>
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-gray-900">Department Overview</h2>
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Department Overview</h2>
             <a href="/departments" className="text-sm text-blue-600 hover:text-blue-700 font-medium">
               View all
             </a>
@@ -614,7 +614,7 @@ const Dashboard = () => {
               {departments.map((dept, index) => (
                 <div
                   key={dept._id}
-                  className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                  className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg hover:bg-gray-100 transition-colors"
                 >
                   <div className="flex items-center gap-3">
                     <div className={`w-10 h-10 rounded-lg flex items-center justify-center text-white font-medium text-sm ${
@@ -623,8 +623,8 @@ const Dashboard = () => {
                       {dept.name?.charAt(0) || 'D'}
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-gray-900">{dept.name}</p>
-                      <p className="text-xs text-gray-500">{dept.code || 'No code'}</p>
+                      <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{dept.name}</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">{dept.code || 'No code'}</p>
                     </div>
                   </div>
                   <Badge variant="default" size="sm">
@@ -634,7 +634,7 @@ const Dashboard = () => {
               ))}
             </div>
           ) : (
-            <div className="text-center py-8 text-gray-500">
+            <div className="text-center py-8 text-gray-500 dark:text-gray-400">
               <svg className="w-12 h-12 mx-auto text-gray-300 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
               </svg>

@@ -206,8 +206,8 @@ const Employees = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Employees</h1>
-          <p className="text-sm text-gray-500 mt-1">Manage your organization's workforce</p>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Employees</h1>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Manage your organization's workforce</p>
         </div>
         {isAdminOrHR() && (
           <Button onClick={() => { resetForm(); setShowModal(true); }}>
@@ -273,14 +273,14 @@ const Employees = () => {
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="bg-gray-50 border-b border-gray-100">
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Employee</th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">ID</th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Department</th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Designation</th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Type</th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Status</th>
-                <th className="px-6 py-4 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">Actions</th>
+              <tr className="bg-gray-50 dark:bg-gray-800 border-b border-gray-100">
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Employee</th>
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">ID</th>
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Department</th>
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Designation</th>
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Type</th>
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Status</th>
+                <th className="px-6 py-4 text-right text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
@@ -300,7 +300,7 @@ const Employees = () => {
                 </tr>
               ) : (
                 employees.map((emp) => (
-                  <tr key={emp._id} className="hover:bg-gray-50 transition-colors">
+                  <tr key={emp._id} className="hover:bg-gray-50 dark:bg-gray-800 transition-colors">
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
                         <Avatar
@@ -309,8 +309,8 @@ const Employees = () => {
                           size="md"
                         />
                         <div>
-                          <p className="font-medium text-gray-900">{emp.firstName} {emp.lastName}</p>
-                          <p className="text-sm text-gray-500">{emp.email}</p>
+                          <p className="font-medium text-gray-900 dark:text-gray-100">{emp.firstName} {emp.lastName}</p>
+                          <p className="text-sm text-gray-500 dark:text-gray-400">{emp.email}</p>
                         </div>
                       </div>
                     </td>
@@ -318,10 +318,10 @@ const Employees = () => {
                       <code className="text-sm bg-gray-100 px-2 py-1 rounded text-gray-700">{emp.employeeId}</code>
                     </td>
                     <td className="px-6 py-4">
-                      <span className="text-sm text-gray-600">{emp.department?.name || '-'}</span>
+                      <span className="text-sm text-gray-600 dark:text-gray-300">{emp.department?.name || '-'}</span>
                     </td>
                     <td className="px-6 py-4">
-                      <span className="text-sm text-gray-600">{emp.designation}</span>
+                      <span className="text-sm text-gray-600 dark:text-gray-300">{emp.designation}</span>
                     </td>
                     <td className="px-6 py-4">
                       {getEmploymentTypeBadge(emp.employmentType)}
@@ -376,7 +376,7 @@ const Employees = () => {
         {/* Pagination */}
         {pagination.pages > 1 && (
           <div className="px-6 py-4 border-t border-gray-100 flex items-center justify-between">
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-gray-500 dark:text-gray-400">
               Showing <span className="font-medium">{employees.length}</span> of <span className="font-medium">{pagination.total}</span> employees
             </p>
             <div className="flex gap-2">
@@ -411,7 +411,7 @@ const Employees = () => {
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Basic Info Section */}
           <div>
-            <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider mb-4">Basic Information</h3>
+            <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 uppercase tracking-wider mb-4">Basic Information</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <Input
                 label="Employee ID"
@@ -477,7 +477,7 @@ const Employees = () => {
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
+                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 dark:text-gray-300"
                   >
                     {showPassword ? (
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -492,10 +492,10 @@ const Employees = () => {
                   </button>
                 </div>
                 {editingEmployee && (
-                  <p className="mt-1 text-xs text-gray-500">Leave blank to keep current password</p>
+                  <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">Leave blank to keep current password</p>
                 )}
                 {!editingEmployee && (
-                  <p className="mt-1 text-xs text-gray-500">Employee will use this to login</p>
+                  <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">Employee will use this to login</p>
                 )}
               </div>
               {/* Role Selection - Admin and HR can see, but options differ */}
@@ -538,7 +538,7 @@ const Employees = () => {
 
           {/* Employment Details */}
           <div>
-            <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider mb-4">Employment Details</h3>
+            <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 uppercase tracking-wider mb-4">Employment Details</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <Input
                 label="Designation"
@@ -583,7 +583,7 @@ const Employees = () => {
 
           {/* Bank Details Section */}
           <div className="border-t pt-4">
-            <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider mb-4">Bank Details</h3>
+            <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 uppercase tracking-wider mb-4">Bank Details</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <Input
                 label="Bank Name *"
