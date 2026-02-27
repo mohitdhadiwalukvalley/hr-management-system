@@ -120,16 +120,6 @@ const Login = () => {
             </span>
           </div>
         </div>
-
-        {/* Demo Credentials */}
-        <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-100 dark:border-blue-800">
-          <p className="text-xs text-blue-700 dark:text-blue-400 font-medium mb-2">Demo Credentials:</p>
-          <div className="text-xs text-blue-600 dark:text-blue-300 space-y-1">
-            <p><span className="font-medium">Admin:</span> admin@test.com / password123</p>
-            <p><span className="font-medium">Employee:</span> test@gmail.com / password123</p>
-            <p><span className="font-medium">Employee:</span> mohitdhadiwal.ukvalley@gmail.com / password123</p>
-          </div>
-        </div>
       </div>
     </div>
   );
