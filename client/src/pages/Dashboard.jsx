@@ -711,27 +711,34 @@ const Dashboard = () => {
           </div>
           {departments.length > 0 ? (
             <div className="space-y-3">
-              {departments.map((dept, index) => (
-                <div
-                  key={dept._id}
-                  className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg hover:bg-gray-100 transition-colors"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center text-white font-medium text-sm ${
-                      ['bg-blue-500', 'bg-emerald-500', 'bg-purple-500', 'bg-amber-500', 'bg-rose-500'][index % 5]
-                    }`}>
-                      {dept.name?.charAt(0) || 'D'}
+              {departments.slice(0, 5).map((dept, index) => {
+                // Calculate employee count for this department
+                const deptEmployeeCount = allEmployees.filter(e =>
+                  e.department?._id === dept._id || e.department === dept._id || e.department?.name === dept.name
+                ).length;
+
+                return (
+                  <div
+                    key={dept._id}
+                    className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className={`w-10 h-10 rounded-lg flex items-center justify-center text-white font-medium text-sm ${
+                        ['bg-blue-500', 'bg-emerald-500', 'bg-purple-500', 'bg-amber-500', 'bg-rose-500'][index % 5]
+                      }`}>
+                        {dept.name?.charAt(0) || 'D'}
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{dept.name}</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">{dept.code || 'No code'}</p>
+                      </div>
                     </div>
-                    <div>
-                      <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{dept.name}</p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">{dept.code || 'No code'}</p>
-                    </div>
+                    <Badge variant="default" size="sm">
+                      {deptEmployeeCount} employee{deptEmployeeCount !== 1 ? 's' : ''}
+                    </Badge>
                   </div>
-                  <Badge variant="default" size="sm">
-                    {dept.employeeCount || 0} employees
-                  </Badge>
-                </div>
-              ))}
+                );
+              })}
             </div>
           ) : (
             <div className="text-center py-8 text-gray-500 dark:text-gray-400">

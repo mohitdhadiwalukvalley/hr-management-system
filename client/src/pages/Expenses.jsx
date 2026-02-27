@@ -1,8 +1,24 @@
 import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
-import { expenseService } from '../services/expenseService';
 import { Button, Input, Card, Badge, LoadingSpinner, Modal, EmptyState } from '../components/common';
 import { useAuth } from '../context/AuthContext';
+
+// Local storage key for expenses
+const EXPENSES_KEY = 'hr_expenses';
+
+// Helper functions for local storage
+const getStoredExpenses = () => {
+  try {
+    const stored = localStorage.getItem(EXPENSES_KEY);
+    return stored ? JSON.parse(stored) : [];
+  } catch {
+    return [];
+  }
+};
+
+const saveExpenses = (expenses) => {
+  localStorage.setItem(EXPENSES_KEY, JSON.stringify(expenses));
+};
 
 const Expenses = () => {
   const { user, isAdmin, isHR, isAdminOrHR, isEmployee } = useAuth();
@@ -24,6 +40,7 @@ const Expenses = () => {
     receipt: null,
   });
   const [submitLoading, setSubmitLoading] = useState(false);
+  const [receiptPreview, setReceiptPreview] = useState(null);
 
   const categories = [
     { value: 'travel', label: 'Travel' },
@@ -38,22 +55,47 @@ const Expenses = () => {
 
   useEffect(() => {
     fetchExpenses();
-  }, [filters]);
+  }, []);
 
-  const fetchExpenses = async () => {
+  useEffect(() => {
+    // Re-filter when filters change
+    fetchExpenses();
+  }, [filters.status, filters.category]);
+
+  const fetchExpenses = () => {
     try {
       setLoading(true);
-      let response;
-      if (isAdminOrHR()) {
-        // Admin/HR can see all expenses (HR expenses only visible to Admin)
-        response = await expenseService.getAll(filters);
+      const allExpenses = getStoredExpenses();
+
+      // Filter based on user role
+      let filteredExpenses = [];
+      if (isAdmin()) {
+        // Admin sees all expenses
+        filteredExpenses = allExpenses;
+      } else if (isHR()) {
+        // HR sees employee expenses (not other HR expenses)
+        filteredExpenses = allExpenses.filter(exp =>
+          exp.employeeRole !== 'hr' || exp.employeeId === user?._id || exp.employeeEmail === user?.email
+        );
       } else {
-        // Employees see only their own expenses
-        response = await expenseService.getMyExpenses(filters);
+        // Employee sees only their own expenses
+        filteredExpenses = allExpenses.filter(exp =>
+          exp.employeeId === user?._id || exp.employeeEmail === user?.email
+        );
       }
 
-      const expensesData = response?.data?.expenses || response?.data?.data || response?.data || response?.expenses || [];
-      setExpenses(expensesData);
+      // Apply status and category filters
+      if (filters.status) {
+        filteredExpenses = filteredExpenses.filter(exp => exp.status === filters.status);
+      }
+      if (filters.category) {
+        filteredExpenses = filteredExpenses.filter(exp => exp.category === filters.category);
+      }
+
+      // Sort by date (newest first)
+      filteredExpenses.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+      setExpenses(filteredExpenses);
     } catch (error) {
       console.error('Failed to fetch expenses:', error);
       toast.error('Failed to fetch expenses');
@@ -67,23 +109,34 @@ const Expenses = () => {
     e.preventDefault();
     setSubmitLoading(true);
     try {
-      const submitData = new FormData();
-      submitData.append('title', formData.title);
-      submitData.append('amount', formData.amount);
-      submitData.append('category', formData.category);
-      submitData.append('description', formData.description);
-      submitData.append('date', formData.date);
-      if (formData.receipt) {
-        submitData.append('receipt', formData.receipt);
-      }
+      const allExpenses = getStoredExpenses();
 
-      await expenseService.create(submitData);
+      const newExpense = {
+        _id: `exp_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+        title: formData.title,
+        amount: parseFloat(formData.amount),
+        category: formData.category,
+        description: formData.description,
+        date: formData.date,
+        receipt: receiptPreview,
+        status: 'pending',
+        employeeId: user?._id,
+        employeeEmail: user?.email,
+        employeeName: user?.email?.split('@')[0] || 'Unknown',
+        employeeRole: user?.role,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+
+      allExpenses.push(newExpense);
+      saveExpenses(allExpenses);
+
       toast.success('Expense submitted successfully');
       setShowModal(false);
       resetForm();
       fetchExpenses();
     } catch (error) {
-      toast.error(error.response?.data?.message || 'Failed to submit expense');
+      toast.error('Failed to submit expense');
     } finally {
       setSubmitLoading(false);
     }
@@ -91,7 +144,13 @@ const Expenses = () => {
 
   const handleApprove = async (id) => {
     try {
-      await expenseService.approve(id);
+      const allExpenses = getStoredExpenses();
+      const index = allExpenses.findIndex(exp => exp._id === id);
+      if (index !== -1) {
+        allExpenses[index].status = 'approved';
+        allExpenses[index].updatedAt = new Date().toISOString();
+        saveExpenses(allExpenses);
+      }
       toast.success('Expense approved');
       fetchExpenses();
     } catch (error) {
@@ -103,7 +162,14 @@ const Expenses = () => {
     const reason = prompt('Please enter rejection reason:');
     if (!reason) return;
     try {
-      await expenseService.reject(id, reason);
+      const allExpenses = getStoredExpenses();
+      const index = allExpenses.findIndex(exp => exp._id === id);
+      if (index !== -1) {
+        allExpenses[index].status = 'rejected';
+        allExpenses[index].rejectionReason = reason;
+        allExpenses[index].updatedAt = new Date().toISOString();
+        saveExpenses(allExpenses);
+      }
       toast.success('Expense rejected');
       fetchExpenses();
     } catch (error) {
@@ -114,7 +180,9 @@ const Expenses = () => {
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this expense?')) return;
     try {
-      await expenseService.delete(id);
+      const allExpenses = getStoredExpenses();
+      const filtered = allExpenses.filter(exp => exp._id !== id);
+      saveExpenses(filtered);
       toast.success('Expense deleted');
       fetchExpenses();
     } catch (error) {
@@ -131,6 +199,18 @@ const Expenses = () => {
       date: new Date().toISOString().split('T')[0],
       receipt: null,
     });
+    setReceiptPreview(null);
+  };
+
+  const handleReceiptChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setReceiptPreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const formatCurrency = (amount) => {
@@ -152,16 +232,6 @@ const Expenses = () => {
   const getCategoryLabel = (category) => {
     return categories.find(c => c.value === category)?.label || category;
   };
-
-  const filteredExpenses = expenses.filter(exp => {
-    // For HR, hide other HR's expenses (only Admin can see HR expenses)
-    if (isHR() && !isAdmin()) {
-      if (exp.employee?.role === 'hr' && exp.employee?._id !== user?._id) {
-        return false;
-      }
-    }
-    return true;
-  });
 
   if (loading) {
     return (
@@ -214,16 +284,19 @@ const Expenses = () => {
               <option key={cat.value} value={cat.value}>{cat.label}</option>
             ))}
           </select>
-          <div className="flex items-center gap-2">
-            <span className="text-sm text-gray-500 dark:text-gray-400">
-              Total: {formatCurrency(filteredExpenses.reduce((sum, exp) => sum + (exp.amount || 0), 0))}
+          <div className="flex items-center gap-2 bg-emerald-50 dark:bg-emerald-900/30 rounded-lg px-4 py-2">
+            <svg className="w-5 h-5 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span className="text-sm font-medium text-emerald-700 dark:text-emerald-300">
+              Total: {formatCurrency(expenses.reduce((sum, exp) => sum + (exp.amount || 0), 0))}
             </span>
           </div>
         </div>
       </Card>
 
       {/* Expenses List */}
-      {filteredExpenses.length === 0 ? (
+      {expenses.length === 0 ? (
         <Card>
           <EmptyState
             title="No expenses found"
@@ -237,7 +310,7 @@ const Expenses = () => {
         </Card>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {filteredExpenses.map((expense) => (
+          {expenses.map((expense) => (
             <Card key={expense._id} className="relative overflow-hidden">
               <div className="flex items-start justify-between mb-3">
                 <div>
@@ -257,9 +330,12 @@ const Expenses = () => {
 
               <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400 mb-3">
                 <span>{new Date(expense.date).toLocaleDateString()}</span>
-                {isAdminOrHR() && expense.employee && (
-                  <span>{expense.employee.firstName} {expense.employee.lastName}
-                    {expense.employee.role === 'hr' && <span className="ml-1 text-indigo-500">(HR)</span>}
+                {isAdminOrHR() && expense.employeeName && (
+                  <span className="flex items-center gap-1">
+                    {expense.employeeName}
+                    {expense.employeeRole === 'hr' && (
+                      <span className="px-1.5 py-0.5 rounded-full bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400 text-xs">(HR)</span>
+                    )}
                   </span>
                 )}
               </div>
@@ -290,7 +366,7 @@ const Expenses = () => {
                       size="sm"
                       variant="ghost"
                       onClick={() => handleApprove(expense._id)}
-                      className="flex-1 text-green-600 hover:bg-green-50"
+                      className="flex-1 text-green-600 hover:bg-green-50 dark:hover:bg-green-900/20"
                     >
                       Approve
                     </Button>
@@ -298,18 +374,18 @@ const Expenses = () => {
                       size="sm"
                       variant="ghost"
                       onClick={() => handleReject(expense._id)}
-                      className="flex-1 text-red-600 hover:bg-red-50"
+                      className="flex-1 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"
                     >
                       Reject
                     </Button>
                   </>
                 )}
-                {expense.status === 'pending' && expense.employee?._id === user?._id && (
+                {expense.status === 'pending' && (expense.employeeId === user?._id || expense.employeeEmail === user?.email) && (
                   <Button
                     size="sm"
                     variant="ghost"
                     onClick={() => handleDelete(expense._id)}
-                    className="flex-1 text-red-600 hover:bg-red-50"
+                    className="flex-1 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"
                   >
                     Delete
                   </Button>
@@ -377,7 +453,7 @@ const Expenses = () => {
                        bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100
                        placeholder-gray-400 dark:placeholder-gray-500 resize-none"
               rows={3}
-              placeholder="Add notes about this expense..."
+              placeholder="Add notes about where/how you spent this amount..."
             />
           </div>
           <div>
@@ -385,13 +461,16 @@ const Expenses = () => {
             <input
               type="file"
               accept="image/*"
-              onChange={(e) => setFormData({ ...formData, receipt: e.target.files[0] })}
+              onChange={handleReceiptChange}
               className="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-600 rounded-lg text-sm
                        bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100
                        file:mr-4 file:py-1 file:px-4 file:rounded-lg file:border-0
                        file:text-sm file:font-medium file:bg-blue-50 dark:file:bg-blue-900/30
                        file:text-blue-700 dark:file:text-blue-400"
             />
+            {receiptPreview && (
+              <img src={receiptPreview} alt="Preview" className="mt-2 h-24 rounded-lg object-cover" />
+            )}
           </div>
           <div className="flex justify-end gap-3 pt-4 border-t border-gray-200 dark:border-gray-600">
             <Button type="button" variant="outline" onClick={() => setShowModal(false)}>
@@ -462,18 +541,21 @@ const Expenses = () => {
               </div>
             )}
 
-            {isAdminOrHR() && selectedExpense.employee && (
+            {isAdminOrHR() && selectedExpense.employeeName && (
               <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
                 <p className="text-sm text-gray-500 dark:text-gray-400">Submitted by</p>
                 <div className="flex items-center gap-2 mt-1">
                   <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center text-white text-xs font-medium">
-                    {selectedExpense.employee.firstName?.[0]}{selectedExpense.employee.lastName?.[0]}
+                    {selectedExpense.employeeName?.[0]?.toUpperCase() || '?'}
                   </div>
                   <div>
                     <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                      {selectedExpense.employee.firstName} {selectedExpense.employee.lastName}
+                      {selectedExpense.employeeName}
+                      {selectedExpense.employeeRole === 'hr' && (
+                        <span className="ml-2 px-1.5 py-0.5 rounded-full bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400 text-xs">HR</span>
+                      )}
                     </p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">{selectedExpense.employee.email}</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">{selectedExpense.employeeEmail}</p>
                   </div>
                 </div>
               </div>
