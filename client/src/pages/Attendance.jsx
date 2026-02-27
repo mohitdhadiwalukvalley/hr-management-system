@@ -155,7 +155,7 @@ const Attendance = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Attendance</h1>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Attendance</h1>
           <p className="text-sm text-gray-500 mt-1">Track and manage employee attendance</p>
         </div>
         {isAdminOrHR() && (
@@ -234,7 +234,7 @@ const Attendance = () => {
               onChange={(e) => setFilters({ ...filters, department: e.target.value })}
               className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm
                        focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
-                       hover:border-gray-300 transition-all bg-white"
+                       hover:border-gray-300 transition-all bg-white dark:bg-gray-900"
             >
               <option value="">All Departments</option>
               {departments.map((dept) => (
@@ -249,7 +249,7 @@ const Attendance = () => {
               onChange={(e) => setFilters({ ...filters, status: e.target.value })}
               className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm
                        focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
-                       hover:border-gray-300 transition-all bg-white"
+                       hover:border-gray-300 transition-all bg-white dark:bg-gray-900"
             >
               <option value="">All Status</option>
               <option value="present">Present</option>
@@ -266,7 +266,7 @@ const Attendance = () => {
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="bg-gray-50 border-b border-gray-100">
+              <tr className="bg-gray-50 border-b border-gray-100 dark:border-gray-700">
                 <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Date</th>
                 <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Employee</th>
                 <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Status</th>
@@ -295,7 +295,7 @@ const Attendance = () => {
                 attendance.map((record) => (
                   <tr key={record._id} className="hover:bg-gray-50 transition-colors">
                     <td className="px-6 py-4">
-                      <span className="text-sm font-medium text-gray-900">
+                      <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
                         {new Date(record.date).toLocaleDateString('en-US', {
                           weekday: 'short',
                           month: 'short',
@@ -310,7 +310,7 @@ const Attendance = () => {
                           size="md"
                         />
                         <div>
-                          <p className="font-medium text-gray-900">
+                          <p className="font-medium text-gray-900 dark:text-gray-100">
                             {record.employee?.firstName} {record.employee?.lastName}
                           </p>
                           <p className="text-sm text-gray-500">{record.employee?.employeeId}</p>
@@ -321,18 +321,18 @@ const Attendance = () => {
                       {getStatusBadge(record.status)}
                     </td>
                     <td className="px-6 py-4">
-                      <span className="text-sm text-gray-600">
+                      <span className="text-sm text-gray-600 dark:text-gray-300">
                         {record.checkIn ? new Date(record.checkIn).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '-'}
                       </span>
                     </td>
                     <td className="px-6 py-4">
-                      <span className="text-sm text-gray-600">
+                      <span className="text-sm text-gray-600 dark:text-gray-300">
                         {record.checkOut ? new Date(record.checkOut).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '-'}
                       </span>
                     </td>
                     <td className="px-6 py-4">
                       {record.workHours ? (
-                        <span className="text-sm font-medium text-gray-900">{record.workHours}h</span>
+                        <span className="text-sm font-medium text-gray-900 dark:text-gray-100">{record.workHours}h</span>
                       ) : (
                         <span className="text-sm text-gray-400">-</span>
                       )}
@@ -362,7 +362,7 @@ const Attendance = () => {
               onChange={(e) => setMarkingData({ ...markingData, employee: e.target.value })}
               className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm
                        focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
-                       hover:border-gray-300 transition-all bg-white"
+                       hover:border-gray-300 transition-all bg-white dark:bg-gray-900"
               required
             >
               <option value="">Select Employee</option>
@@ -387,7 +387,7 @@ const Attendance = () => {
               onChange={(e) => setMarkingData({ ...markingData, status: e.target.value })}
               className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm
                        focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
-                       hover:border-gray-300 transition-all bg-white"
+                       hover:border-gray-300 transition-all bg-white dark:bg-gray-900"
             >
               <option value="present">Present</option>
               <option value="absent">Absent</option>
@@ -421,7 +421,7 @@ const Attendance = () => {
               placeholder="Optional notes..."
             />
           </div>
-          <div className="flex justify-end gap-3 pt-4 border-t border-gray-200">
+          <div className="flex justify-end gap-3 pt-4 border-t border-gray-200 dark:border-gray-600">
             <Button type="button" variant="outline" onClick={() => setShowMarkModal(false)}>
               Cancel
             </Button>

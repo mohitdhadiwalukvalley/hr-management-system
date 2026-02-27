@@ -70,7 +70,7 @@ const EmployeeDetail = () => {
             </svg>
           </Button>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
               {employee.firstName} {employee.lastName}
             </h1>
             <p className="text-sm text-gray-500">{employee.designation}</p>
@@ -98,13 +98,13 @@ const EmployeeDetail = () => {
             />
             <div className="flex-1 sm:pb-2">
               <div className="flex flex-wrap items-center gap-2 mb-1">
-                <h2 className="text-xl font-bold text-gray-900">
+                <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">
                   {employee.firstName} {employee.lastName}
                 </h2>
                 {getStatusBadge(employee.status)}
                 {getEmploymentTypeBadge(employee.employmentType)}
               </div>
-              <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600">
+              <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 dark:text-gray-300">
                 <span className="flex items-center gap-1.5">
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
@@ -134,22 +134,22 @@ const EmployeeDetail = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                 </svg>
               </div>
-              <h3 className="text-lg font-semibold text-gray-900">Personal Information</h3>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Personal Information</h3>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div className="space-y-1">
                 <p className="text-sm text-gray-500">Employee ID</p>
-                <p className="font-medium text-gray-900">
+                <p className="font-medium text-gray-900 dark:text-gray-100">
                   <code className="bg-gray-100 px-2 py-0.5 rounded">{employee.employeeId}</code>
                 </p>
               </div>
               <div className="space-y-1">
                 <p className="text-sm text-gray-500">Email</p>
-                <p className="font-medium text-gray-900">{employee.email}</p>
+                <p className="font-medium text-gray-900 dark:text-gray-100">{employee.email}</p>
               </div>
               <div className="space-y-1">
                 <p className="text-sm text-gray-500">Phone</p>
-                <p className="font-medium text-gray-900">{employee.phone || '-'}</p>
+                <p className="font-medium text-gray-900 dark:text-gray-100">{employee.phone || '-'}</p>
               </div>
               <div className="space-y-1">
                 <p className="text-sm text-gray-500">Gender</p>
@@ -157,7 +157,7 @@ const EmployeeDetail = () => {
               </div>
               <div className="space-y-1">
                 <p className="text-sm text-gray-500">Date of Birth</p>
-                <p className="font-medium text-gray-900">
+                <p className="font-medium text-gray-900 dark:text-gray-100">
                   {employee.dateOfBirth ? new Date(employee.dateOfBirth).toLocaleDateString('en-US', {
                     year: 'numeric',
                     month: 'long',
@@ -167,7 +167,7 @@ const EmployeeDetail = () => {
               </div>
               <div className="space-y-1">
                 <p className="text-sm text-gray-500">Location</p>
-                <p className="font-medium text-gray-900">
+                <p className="font-medium text-gray-900 dark:text-gray-100">
                   {employee.address?.city ? `${employee.address.city}, ${employee.address.state}` : '-'}
                 </p>
               </div>
@@ -182,20 +182,20 @@ const EmployeeDetail = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                 </svg>
               </div>
-              <h3 className="text-lg font-semibold text-gray-900">Employment Details</h3>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Employment Details</h3>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div className="space-y-1">
                 <p className="text-sm text-gray-500">Department</p>
-                <p className="font-medium text-gray-900">{employee.department?.name || '-'}</p>
+                <p className="font-medium text-gray-900 dark:text-gray-100">{employee.department?.name || '-'}</p>
               </div>
               <div className="space-y-1">
                 <p className="text-sm text-gray-500">Designation</p>
-                <p className="font-medium text-gray-900">{employee.designation}</p>
+                <p className="font-medium text-gray-900 dark:text-gray-100">{employee.designation}</p>
               </div>
               <div className="space-y-1">
                 <p className="text-sm text-gray-500">Date of Joining</p>
-                <p className="font-medium text-gray-900">
+                <p className="font-medium text-gray-900 dark:text-gray-100">
                   {new Date(employee.dateOfJoining).toLocaleDateString('en-US', {
                     year: 'numeric',
                     month: 'long',
@@ -209,7 +209,7 @@ const EmployeeDetail = () => {
               </div>
               <div className="space-y-1">
                 <p className="text-sm text-gray-500">Reporting Manager</p>
-                <p className="font-medium text-gray-900">
+                <p className="font-medium text-gray-900 dark:text-gray-100">
                   {employee.reportingManager
                     ? `${employee.reportingManager.firstName} ${employee.reportingManager.lastName}`
                     : '-'}
@@ -217,7 +217,7 @@ const EmployeeDetail = () => {
               </div>
               <div className="space-y-1">
                 <p className="text-sm text-gray-500">Date of Leaving</p>
-                <p className="font-medium text-gray-900">
+                <p className="font-medium text-gray-900 dark:text-gray-100">
                   {employee.dateOfLeaving ? new Date(employee.dateOfLeaving).toLocaleDateString() : '-'}
                 </p>
               </div>
@@ -233,12 +233,12 @@ const EmployeeDetail = () => {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900">Salary Details</h3>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Salary Details</h3>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div className="space-y-1">
                   <p className="text-sm text-gray-500">Basic Salary</p>
-                  <p className="text-2xl font-bold text-gray-900">
+                  <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
                     ${employee.salary?.basic?.toLocaleString() || 0}
                   </p>
                 </div>
@@ -282,21 +282,21 @@ const EmployeeDetail = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                 </svg>
               </div>
-              <h3 className="text-lg font-semibold text-gray-900">Emergency Contact</h3>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Emergency Contact</h3>
             </div>
             {employee.emergencyContact?.name ? (
               <div className="space-y-3">
                 <div>
                   <p className="text-sm text-gray-500">Name</p>
-                  <p className="font-medium text-gray-900">{employee.emergencyContact.name}</p>
+                  <p className="font-medium text-gray-900 dark:text-gray-100">{employee.emergencyContact.name}</p>
                 </div>
                 <div>
                   <p className="text-sm text-gray-500">Relationship</p>
-                  <p className="font-medium text-gray-900">{employee.emergencyContact.relationship}</p>
+                  <p className="font-medium text-gray-900 dark:text-gray-100">{employee.emergencyContact.relationship}</p>
                 </div>
                 <div>
                   <p className="text-sm text-gray-500">Phone</p>
-                  <p className="font-medium text-gray-900">{employee.emergencyContact.phone}</p>
+                  <p className="font-medium text-gray-900 dark:text-gray-100">{employee.emergencyContact.phone}</p>
                 </div>
               </div>
             ) : (

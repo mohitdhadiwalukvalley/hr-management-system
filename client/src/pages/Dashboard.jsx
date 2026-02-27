@@ -254,7 +254,7 @@ const Dashboard = () => {
         {/* Quick Actions for Employee */}
         <Card>
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 dark:text-gray-100">Quick Actions</h2>
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Quick Actions</h2>
           </div>
           <div className="grid grid-cols-3 gap-3">
             {employeeQuickActions.map((action) => (
@@ -275,7 +275,7 @@ const Dashboard = () => {
         {/* My Leaves */}
         <Card>
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 dark:text-gray-100">My Leave Requests</h2>
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">My Leave Requests</h2>
             <a href="/leaves" className="text-sm text-blue-600 hover:text-blue-700 font-medium">
               View all
             </a>
@@ -472,7 +472,7 @@ const Dashboard = () => {
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="bg-gray-50 dark:bg-gray-800 border-b border-gray-200">
+              <tr className="bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-600">
                 <th className="text-left py-3 px-4 text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Employee</th>
                 <th className="text-left py-3 px-4 text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Status</th>
                 <th className="text-left py-3 px-4 text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Check In</th>

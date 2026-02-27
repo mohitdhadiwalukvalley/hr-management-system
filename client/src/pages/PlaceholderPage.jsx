@@ -5,7 +5,7 @@ const PlaceholderPage = ({ title }) => {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">{title}</h1>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">{title}</h1>
         <p className="text-sm text-gray-500 mt-1">This module is coming soon</p>
       </div>
 
@@ -61,7 +61,7 @@ const PlaceholderPage = ({ title }) => {
               </svg>
             </div>
             <div>
-              <h4 className="font-semibold text-gray-900">Fast Performance</h4>
+              <h4 className="font-semibold text-gray-900 dark:text-gray-100">Fast Performance</h4>
               <p className="text-sm text-gray-600 mt-1">Optimized for speed and efficiency</p>
             </div>
           </div>
@@ -74,7 +74,7 @@ const PlaceholderPage = ({ title }) => {
               </svg>
             </div>
             <div>
-              <h4 className="font-semibold text-gray-900">Secure & Reliable</h4>
+              <h4 className="font-semibold text-gray-900 dark:text-gray-100">Secure & Reliable</h4>
               <p className="text-sm text-gray-600 mt-1">Enterprise-grade security built-in</p>
             </div>
           </div>
@@ -87,7 +87,7 @@ const PlaceholderPage = ({ title }) => {
               </svg>
             </div>
             <div>
-              <h4 className="font-semibold text-gray-900">Modern UI</h4>
+              <h4 className="font-semibold text-gray-900 dark:text-gray-100">Modern UI</h4>
               <p className="text-sm text-gray-600 mt-1">Clean and intuitive interface</p>
             </div>
           </div>

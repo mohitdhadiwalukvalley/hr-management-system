@@ -180,7 +180,7 @@ const Leaves = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Leave Management</h1>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Leave Management</h1>
           <p className="text-sm text-gray-500 mt-1">Manage leave requests and balances</p>
         </div>
         <Button onClick={() => { resetForm(); setShowApplyModal(true); }}>
@@ -245,7 +245,7 @@ const Leaves = () => {
               onChange={(e) => setFilters({ ...filters, status: e.target.value })}
               className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm
                        focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
-                       hover:border-gray-300 transition-all bg-white"
+                       hover:border-gray-300 transition-all bg-white dark:bg-gray-900"
             >
               <option value="">All Status</option>
               <option value="pending">Pending</option>
@@ -261,7 +261,7 @@ const Leaves = () => {
               onChange={(e) => setFilters({ ...filters, leaveType: e.target.value })}
               className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm
                        focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
-                       hover:border-gray-300 transition-all bg-white"
+                       hover:border-gray-300 transition-all bg-white dark:bg-gray-900"
             >
               <option value="">All Types</option>
               <option value="casual">Casual</option>
@@ -277,7 +277,7 @@ const Leaves = () => {
                 onChange={(e) => setFilters({ ...filters, employee: e.target.value })}
                 className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm
                          focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
-                         hover:border-gray-300 transition-all bg-white"
+                         hover:border-gray-300 transition-all bg-white dark:bg-gray-900"
               >
                 <option value="">All Employees</option>
                 {employees.map((emp) => (
@@ -296,7 +296,7 @@ const Leaves = () => {
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="bg-gray-50 border-b border-gray-100">
+              <tr className="bg-gray-50 border-b border-gray-100 dark:border-gray-700">
                 <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Employee</th>
                 <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Type</th>
                 <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Dates</th>
@@ -330,7 +330,7 @@ const Leaves = () => {
                           size="md"
                         />
                         <div>
-                          <p className="font-medium text-gray-900">
+                          <p className="font-medium text-gray-900 dark:text-gray-100">
                             {leave.employee?.firstName} {leave.employee?.lastName}
                           </p>
                           <p className="text-sm text-gray-500">{leave.employee?.employeeId}</p>
@@ -342,12 +342,12 @@ const Leaves = () => {
                     </td>
                     <td className="px-6 py-4">
                       <div className="text-sm">
-                        <p className="text-gray-900">{new Date(leave.startDate).toLocaleDateString()}</p>
+                        <p className="text-gray-900 dark:text-gray-100">{new Date(leave.startDate).toLocaleDateString()}</p>
                         <p className="text-gray-500">to {new Date(leave.endDate).toLocaleDateString()}</p>
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <span className="text-sm font-medium text-gray-900">
+                      <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
                         {leave.days} {leave.halfDay && <span className="text-gray-500">(Half)</span>}
                       </span>
                     </td>
@@ -407,7 +407,7 @@ const Leaves = () => {
                 }}
                 className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm
                          focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
-                         hover:border-gray-300 transition-all bg-white"
+                         hover:border-gray-300 transition-all bg-white dark:bg-gray-900"
                 required
               >
                 <option value="">Select Employee</option>
@@ -426,7 +426,7 @@ const Leaves = () => {
               onChange={(e) => setFormData({ ...formData, leaveType: e.target.value })}
               className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm
                        focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
-                       hover:border-gray-300 transition-all bg-white"
+                       hover:border-gray-300 transition-all bg-white dark:bg-gray-900"
             >
               <option value="casual">Casual</option>
               <option value="sick">Sick</option>
@@ -479,7 +479,7 @@ const Leaves = () => {
               placeholder="Enter reason for leave..."
             />
           </div>
-          <div className="flex justify-end gap-3 pt-4 border-t border-gray-200">
+          <div className="flex justify-end gap-3 pt-4 border-t border-gray-200 dark:border-gray-600">
             <Button type="button" variant="outline" onClick={() => setShowApplyModal(false)}>
               Cancel
             </Button>
@@ -511,7 +511,7 @@ const Leaves = () => {
               placeholder="Enter reason for rejection..."
             />
           </div>
-          <div className="flex justify-end gap-3 pt-4 border-t border-gray-200">
+          <div className="flex justify-end gap-3 pt-4 border-t border-gray-200 dark:border-gray-600">
             <Button
               variant="outline"
               onClick={() => {

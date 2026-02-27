@@ -110,7 +110,7 @@ const Departments = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Departments</h1>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Departments</h1>
           <p className="text-sm text-gray-500 mt-1">Manage organizational structure and leave policies</p>
         </div>
         <Button onClick={() => { resetForm(); setShowModal(true); }}>
@@ -166,7 +166,7 @@ const Departments = () => {
                       {dept.name.charAt(0)}
                     </div>
                     <div>
-                      <h3 className="font-semibold text-gray-900">{dept.name}</h3>
+                      <h3 className="font-semibold text-gray-900 dark:text-gray-100">{dept.name}</h3>
                       <code className="text-sm text-gray-500 bg-gray-100 px-1.5 py-0.5 rounded">{dept.code}</code>
                     </div>
                   </div>
@@ -200,7 +200,7 @@ const Departments = () => {
 
                 {/* Manager */}
                 {dept.manager && (
-                  <div className="flex items-center gap-2 mb-4 text-sm text-gray-600">
+                  <div className="flex items-center gap-2 mb-4 text-sm text-gray-600 dark:text-gray-300">
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                     </svg>
@@ -209,7 +209,7 @@ const Departments = () => {
                 )}
 
                 {/* Actions */}
-                <div className="flex items-center gap-2 pt-3 border-t border-gray-100">
+                <div className="flex items-center gap-2 pt-3 border-t border-gray-100 dark:border-gray-700">
                   <Button
                     size="sm"
                     variant="ghost"
@@ -316,7 +316,7 @@ const Departments = () => {
             </div>
           </div>
 
-          <div className="flex justify-end gap-3 pt-4 border-t border-gray-200">
+          <div className="flex justify-end gap-3 pt-4 border-t border-gray-200 dark:border-gray-600">
             <Button type="button" variant="outline" onClick={() => { setShowModal(false); resetForm(); }}>
               Cancel
             </Button>

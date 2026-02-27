@@ -128,10 +128,10 @@ const Reports = () => {
               </thead>
               <tbody className="divide-y divide-gray-100">
                 {reportData.report.map((item) => (
-                  <tr key={item.employee._id} className="hover:bg-gray-50">
+                  <tr key={item.employee._id} className="hover:bg-gray-50 dark:bg-gray-800">
                     <td className="px-6 py-4">
                       <div>
-                        <p className="font-medium text-gray-900">{item.employee.name}</p>
+                        <p className="font-medium text-gray-900 dark:text-gray-100">{item.employee.name}</p>
                         <p className="text-sm text-gray-500">{item.employee.department}</p>
                       </div>
                     </td>
@@ -182,10 +182,10 @@ const Reports = () => {
               </thead>
               <tbody className="divide-y divide-gray-100">
                 {reportData.report.map((item) => (
-                  <tr key={item.employee._id} className="hover:bg-gray-50">
+                  <tr key={item.employee._id} className="hover:bg-gray-50 dark:bg-gray-800">
                     <td className="px-6 py-4">
                       <div>
-                        <p className="font-medium text-gray-900">{item.employee.name}</p>
+                        <p className="font-medium text-gray-900 dark:text-gray-100">{item.employee.name}</p>
                         <p className="text-sm text-gray-500">{item.employee.department}</p>
                       </div>
                     </td>
@@ -237,10 +237,10 @@ const Reports = () => {
               </thead>
               <tbody className="divide-y divide-gray-100">
                 {reportData.payroll.map((item) => (
-                  <tr key={item._id} className="hover:bg-gray-50">
+                  <tr key={item._id} className="hover:bg-gray-50 dark:bg-gray-800">
                     <td className="px-6 py-4">
                       <div>
-                        <p className="font-medium text-gray-900">
+                        <p className="font-medium text-gray-900 dark:text-gray-100">
                           {item.employee?.firstName} {item.employee?.lastName}
                         </p>
                         <p className="text-sm text-gray-500">{item.employee?.department?.name}</p>
@@ -319,21 +319,21 @@ const Reports = () => {
             <Card key={dept._id}>
               <div className="flex items-start justify-between mb-4">
                 <div>
-                  <h3 className="font-semibold text-gray-900">{dept.name}</h3>
+                  <h3 className="font-semibold text-gray-900 dark:text-gray-100">{dept.name}</h3>
                   <p className="text-sm text-gray-500">{dept.code}</p>
                 </div>
                 <Badge variant={dept.isActive ? 'success' : 'default'}>
                   {dept.isActive ? 'Active' : 'Inactive'}
                 </Badge>
               </div>
-              <div className="flex items-center gap-2 text-sm text-gray-600">
+              <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                 </svg>
                 <span>{dept.employeeCount} employees</span>
               </div>
               {dept.manager && (
-                <div className="mt-2 text-sm text-gray-600">
+                <div className="mt-2 text-sm text-gray-600 dark:text-gray-300">
                   Manager: {dept.manager}
                 </div>
               )}
@@ -371,7 +371,7 @@ const Reports = () => {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Reports</h1>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Reports</h1>
         <p className="text-sm text-gray-500 mt-1">Generate and view various reports</p>
       </div>
 
@@ -407,7 +407,7 @@ const Reports = () => {
                 <select
                   value={filters.month}
                   onChange={(e) => setFilters({ ...filters, month: parseInt(e.target.value) })}
-                  className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 hover:border-gray-300 transition-all bg-white"
+                  className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 hover:border-gray-300 transition-all bg-white dark:bg-gray-900"
                 >
                   {months.map((m) => (
                     <option key={m.value} value={m.value}>{m.label}</option>
@@ -420,7 +420,7 @@ const Reports = () => {
               <select
                 value={filters.year}
                 onChange={(e) => setFilters({ ...filters, year: parseInt(e.target.value) })}
-                className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 hover:border-gray-300 transition-all bg-white"
+                className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 hover:border-gray-300 transition-all bg-white dark:bg-gray-900"
               >
                 {[2024, 2025, 2026].map((y) => (
                   <option key={y} value={y}>{y}</option>

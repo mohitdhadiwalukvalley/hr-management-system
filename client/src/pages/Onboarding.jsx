@@ -134,7 +134,7 @@ const Onboarding = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Onboarding</h1>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Onboarding</h1>
           <p className="text-sm text-gray-500 mt-1">Manage new employee onboarding process</p>
         </div>
         {isAdminOrHR() && (
@@ -163,7 +163,7 @@ const Onboarding = () => {
             <select
               value={filters.status}
               onChange={(e) => setFilters({ ...filters, status: e.target.value })}
-              className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 hover:border-gray-300 transition-all bg-white"
+              className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 hover:border-gray-300 transition-all bg-white dark:bg-gray-900"
             >
               <option value="">All Status</option>
               <option value="pending">Pending</option>
@@ -207,7 +207,7 @@ const Onboarding = () => {
                         size="lg"
                       />
                       <div>
-                        <h3 className="font-semibold text-gray-900">
+                        <h3 className="font-semibold text-gray-900 dark:text-gray-100">
                           {item.employee?.firstName} {item.employee?.lastName}
                         </h3>
                         <p className="text-sm text-gray-500">{item.employee?.employeeId}</p>
@@ -219,8 +219,8 @@ const Onboarding = () => {
                   {/* Progress */}
                   <div className="mb-4">
                     <div className="flex items-center justify-between text-sm mb-1">
-                      <span className="text-gray-600">Progress</span>
-                      <span className="font-medium text-gray-900">{progress}%</span>
+                      <span className="text-gray-600 dark:text-gray-300">Progress</span>
+                      <span className="font-medium text-gray-900 dark:text-gray-100">{progress}%</span>
                     </div>
                     <div className="w-full bg-gray-100 rounded-full h-2">
                       <div
@@ -244,7 +244,7 @@ const Onboarding = () => {
                   )}
 
                   {/* Actions */}
-                  <div className="flex items-center gap-2 pt-3 border-t border-gray-100">
+                  <div className="flex items-center gap-2 pt-3 border-t border-gray-100 dark:border-gray-700">
                     <Button
                       size="sm"
                       variant="ghost"
@@ -283,7 +283,7 @@ const Onboarding = () => {
             <select
               value={formData.employee}
               onChange={(e) => setFormData({ ...formData, employee: e.target.value })}
-              className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 hover:border-gray-300 transition-all bg-white"
+              className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 hover:border-gray-300 transition-all bg-white dark:bg-gray-900"
               required
             >
               <option value="">Select Employee</option>
@@ -300,7 +300,7 @@ const Onboarding = () => {
             <select
               value={formData.mentor}
               onChange={(e) => setFormData({ ...formData, mentor: e.target.value })}
-              className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 hover:border-gray-300 transition-all bg-white"
+              className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 hover:border-gray-300 transition-all bg-white dark:bg-gray-900"
             >
               <option value="">Select Mentor</option>
               {employees.map((emp) => (
@@ -322,7 +322,7 @@ const Onboarding = () => {
             />
           </div>
 
-          <div className="flex justify-end gap-3 pt-4 border-t border-gray-200">
+          <div className="flex justify-end gap-3 pt-4 border-t border-gray-200 dark:border-gray-600">
             <Button type="button" variant="outline" onClick={() => setShowModal(false)}>
               Cancel
             </Button>
@@ -378,7 +378,7 @@ const Onboarding = () => {
                         )}
                       </div>
                       <div>
-                        <p className="text-sm font-medium text-gray-900">{item.task}</p>
+                        <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{item.task}</p>
                         {item.description && (
                           <p className="text-xs text-gray-500">{item.description}</p>
                         )}
@@ -403,7 +403,7 @@ const Onboarding = () => {
 
             {/* Actions */}
             {isAdminOrHR() && selectedOnboarding.status !== 'completed' && (
-              <div className="flex justify-end gap-3 pt-4 border-t border-gray-200">
+              <div className="flex justify-end gap-3 pt-4 border-t border-gray-200 dark:border-gray-600">
                 {selectedOnboarding.status === 'pending' && (
                   <Button onClick={() => handleUpdateStatus(selectedOnboarding._id, 'in_progress')}>
                     Start Onboarding

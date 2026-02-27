@@ -173,7 +173,7 @@ const Payroll = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Payroll</h1>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Payroll</h1>
           <p className="text-sm text-gray-500 mt-1">Manage employee salaries and payments</p>
         </div>
         {isAdminOrHR() && (
@@ -230,7 +230,7 @@ const Payroll = () => {
             <select
               value={filters.month}
               onChange={(e) => setFilters({ ...filters, month: parseInt(e.target.value) })}
-              className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 hover:border-gray-300 transition-all bg-white"
+              className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 hover:border-gray-300 transition-all bg-white dark:bg-gray-900"
             >
               {months.map((m) => (
                 <option key={m.value} value={m.value}>{m.label}</option>
@@ -242,7 +242,7 @@ const Payroll = () => {
             <select
               value={filters.year}
               onChange={(e) => setFilters({ ...filters, year: parseInt(e.target.value) })}
-              className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 hover:border-gray-300 transition-all bg-white"
+              className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 hover:border-gray-300 transition-all bg-white dark:bg-gray-900"
             >
               {[2024, 2025, 2026].map((y) => (
                 <option key={y} value={y}>{y}</option>
@@ -254,7 +254,7 @@ const Payroll = () => {
             <select
               value={filters.status}
               onChange={(e) => setFilters({ ...filters, status: e.target.value })}
-              className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 hover:border-gray-300 transition-all bg-white"
+              className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 hover:border-gray-300 transition-all bg-white dark:bg-gray-900"
             >
               <option value="">All Status</option>
               <option value="draft">Draft</option>
@@ -271,7 +271,7 @@ const Payroll = () => {
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="bg-gray-50 border-b border-gray-100">
+              <tr className="bg-gray-50 border-b border-gray-100 dark:border-gray-700">
                 <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Employee</th>
                 <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Period</th>
                 <th className="px-6 py-4 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">Gross</th>
@@ -302,7 +302,7 @@ const Payroll = () => {
                           size="md"
                         />
                         <div>
-                          <p className="font-medium text-gray-900">
+                          <p className="font-medium text-gray-900 dark:text-gray-100">
                             {payroll.employee?.firstName} {payroll.employee?.lastName}
                           </p>
                           <p className="text-sm text-gray-500">{payroll.employee?.employeeId}</p>
@@ -310,12 +310,12 @@ const Payroll = () => {
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <span className="text-sm text-gray-900">
+                      <span className="text-sm text-gray-900 dark:text-gray-100">
                         {months.find(m => m.value === payroll.month)?.label} {payroll.year}
                       </span>
                     </td>
                     <td className="px-6 py-4 text-right">
-                      <span className="text-sm text-gray-900">{formatCurrency(payroll.grossSalary)}</span>
+                      <span className="text-sm text-gray-900 dark:text-gray-100">{formatCurrency(payroll.grossSalary)}</span>
                     </td>
                     <td className="px-6 py-4 text-right">
                       <span className="text-sm text-red-600">
@@ -329,7 +329,7 @@ const Payroll = () => {
                       </span>
                     </td>
                     <td className="px-6 py-4 text-right">
-                      <span className="text-sm font-bold text-gray-900">{formatCurrency(payroll.netSalary)}</span>
+                      <span className="text-sm font-bold text-gray-900 dark:text-gray-100">{formatCurrency(payroll.netSalary)}</span>
                     </td>
                     <td className="px-6 py-4">
                       {getStatusBadge(payroll.status)}
@@ -383,7 +383,7 @@ const Payroll = () => {
             <select
               value={formData.employeeId}
               onChange={(e) => setFormData({ ...formData, employeeId: e.target.value })}
-              className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 hover:border-gray-300 transition-all bg-white"
+              className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 hover:border-gray-300 transition-all bg-white dark:bg-gray-900"
               required
             >
               <option value="">Select Employee</option>
@@ -401,7 +401,7 @@ const Payroll = () => {
               <select
                 value={formData.month}
                 onChange={(e) => setFormData({ ...formData, month: parseInt(e.target.value) })}
-                className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 hover:border-gray-300 transition-all bg-white"
+                className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 hover:border-gray-300 transition-all bg-white dark:bg-gray-900"
               >
                 {months.map((m) => (
                   <option key={m.value} value={m.value}>{m.label}</option>
@@ -413,7 +413,7 @@ const Payroll = () => {
               <select
                 value={formData.year}
                 onChange={(e) => setFormData({ ...formData, year: parseInt(e.target.value) })}
-                className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 hover:border-gray-300 transition-all bg-white"
+                className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 hover:border-gray-300 transition-all bg-white dark:bg-gray-900"
               >
                 {[2024, 2025, 2026].map((y) => (
                   <option key={y} value={y}>{y}</option>
@@ -422,7 +422,7 @@ const Payroll = () => {
             </div>
           </div>
 
-          <div className="flex justify-end gap-3 pt-4 border-t border-gray-200">
+          <div className="flex justify-end gap-3 pt-4 border-t border-gray-200 dark:border-gray-600">
             <Button type="button" variant="outline" onClick={() => setShowGenerateModal(false)}>
               Cancel
             </Button>
@@ -460,19 +460,19 @@ const Payroll = () => {
             <div className="grid grid-cols-2 gap-4 p-4 bg-gray-50 rounded-xl">
               <div>
                 <p className="text-xs text-gray-500">Employee Name</p>
-                <p className="font-medium text-gray-900">{payslipData.employee.name}</p>
+                <p className="font-medium text-gray-900 dark:text-gray-100">{payslipData.employee.name}</p>
               </div>
               <div>
                 <p className="text-xs text-gray-500">Employee ID</p>
-                <p className="font-medium text-gray-900">{payslipData.employee.employeeId}</p>
+                <p className="font-medium text-gray-900 dark:text-gray-100">{payslipData.employee.employeeId}</p>
               </div>
               <div>
                 <p className="text-xs text-gray-500">Department</p>
-                <p className="font-medium text-gray-900">{payslipData.employee.department || '-'}</p>
+                <p className="font-medium text-gray-900 dark:text-gray-100">{payslipData.employee.department || '-'}</p>
               </div>
               <div>
                 <p className="text-xs text-gray-500">Designation</p>
-                <p className="font-medium text-gray-900">{payslipData.employee.designation || '-'}</p>
+                <p className="font-medium text-gray-900 dark:text-gray-100">{payslipData.employee.designation || '-'}</p>
               </div>
             </div>
 
@@ -483,23 +483,23 @@ const Payroll = () => {
                 <h4 className="font-medium text-gray-900 mb-3">Earnings</h4>
                 <div className="space-y-2">
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Basic</span>
+                    <span className="text-gray-600 dark:text-gray-300">Basic</span>
                     <span className="font-medium">{formatCurrency(payslipData.earnings?.basic)}</span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Allowances</span>
+                    <span className="text-gray-600 dark:text-gray-300">Allowances</span>
                     <span className="font-medium">{formatCurrency(payslipData.earnings?.allowances)}</span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Overtime</span>
+                    <span className="text-gray-600 dark:text-gray-300">Overtime</span>
                     <span className="font-medium">{formatCurrency(payslipData.earnings?.overtime)}</span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Bonus</span>
+                    <span className="text-gray-600 dark:text-gray-300">Bonus</span>
                     <span className="font-medium">{formatCurrency(payslipData.earnings?.bonus)}</span>
                   </div>
-                  <div className="flex justify-between text-sm pt-2 border-t border-gray-200">
-                    <span className="font-medium text-gray-900">Gross Salary</span>
+                  <div className="flex justify-between text-sm pt-2 border-t border-gray-200 dark:border-gray-600">
+                    <span className="font-medium text-gray-900 dark:text-gray-100">Gross Salary</span>
                     <span className="font-bold text-emerald-600">{formatCurrency(payslipData.grossSalary)}</span>
                   </div>
                 </div>
@@ -510,19 +510,19 @@ const Payroll = () => {
                 <h4 className="font-medium text-gray-900 mb-3">Deductions</h4>
                 <div className="space-y-2">
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Tax</span>
+                    <span className="text-gray-600 dark:text-gray-300">Tax</span>
                     <span className="font-medium text-red-600">-{formatCurrency(payslipData.deductions?.tax)}</span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">PF</span>
+                    <span className="text-gray-600 dark:text-gray-300">PF</span>
                     <span className="font-medium text-red-600">-{formatCurrency(payslipData.deductions?.pf)}</span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Insurance</span>
+                    <span className="text-gray-600 dark:text-gray-300">Insurance</span>
                     <span className="font-medium text-red-600">-{formatCurrency(payslipData.deductions?.insurance)}</span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Leave Deduction</span>
+                    <span className="text-gray-600 dark:text-gray-300">Leave Deduction</span>
                     <span className="font-medium text-red-600">-{formatCurrency(payslipData.deductions?.leaveDeduction)}</span>
                   </div>
                 </div>
@@ -532,13 +532,13 @@ const Payroll = () => {
             {/* Net Salary */}
             <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4">
               <div className="flex justify-between items-center">
-                <span className="text-lg font-medium text-gray-900">Net Salary</span>
+                <span className="text-lg font-medium text-gray-900 dark:text-gray-100">Net Salary</span>
                 <span className="text-2xl font-bold text-emerald-600">{formatCurrency(payslipData.netSalary)}</span>
               </div>
             </div>
 
             {/* Working Days */}
-            <div className="flex gap-6 text-sm text-gray-600">
+            <div className="flex gap-6 text-sm text-gray-600 dark:text-gray-300">
               <span>Working Days: <strong>{payslipData.workingDays}</strong></span>
               <span>Paid Days: <strong>{payslipData.paidDays}</strong></span>
               <span>Unpaid Days: <strong>{payslipData.unpaidDays}</strong></span>
