@@ -55,9 +55,10 @@ const Payroll = () => {
       };
       if (filters.status) params.status = filters.status;
       const response = await payrollService.getAll(params);
-      setPayrollList(response.data.payroll);
+      setPayrollList(response.data?.payroll || response.payroll || []);
     } catch (error) {
-      toast.error('Failed to fetch payroll records');
+      console.error('Payroll fetch error:', error);
+      toast.error(error.response?.data?.message || 'Failed to fetch payroll records');
     } finally {
       setLoading(false);
     }
@@ -66,9 +67,9 @@ const Payroll = () => {
   const fetchEmployees = async () => {
     try {
       const response = await employeeService.getAll({ limit: 100, status: 'active' });
-      setEmployees(response.data.employees);
+      setEmployees(response.data?.employees || response.employees || []);
     } catch (error) {
-      console.error('Failed to fetch employees');
+      console.error('Failed to fetch employees:', error);
     }
   };
 
@@ -115,11 +116,12 @@ const Payroll = () => {
   const handleViewPayslip = async (payroll) => {
     try {
       const response = await payrollService.getPayslip(payroll._id);
-      setPayslipData(response.data.payslip);
+      setPayslipData(response.data?.payslip || response.payslip);
       setSelectedPayroll(payroll);
       setShowPayslipModal(true);
     } catch (error) {
-      toast.error('Failed to fetch payslip');
+      console.error('Payslip error:', error);
+      toast.error(error.response?.data?.message || 'Failed to fetch payslip');
     }
   };
 
