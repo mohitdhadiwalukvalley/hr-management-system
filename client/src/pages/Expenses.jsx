@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { Button, Input, Card, Badge, LoadingSpinner, Modal, EmptyState } from '../components/common';
 import { useAuth } from '../context/AuthContext';
-import { formatCurrency, getUserCountry } from '../utils/currency';
+import { formatCurrency, getCurrencySymbol, getCountryByCode } from '../utils/currency';
 
 // Local storage key for expenses
 const EXPENSES_KEY = 'hr_expenses';
@@ -68,21 +68,33 @@ const Expenses = () => {
       setLoading(true);
       const allExpenses = getStoredExpenses();
 
-      // Filter based on user role
+      // Filter based on user role - STRICT VISIBILITY
       let filteredExpenses = [];
+
+      // Create unique user identifier
+      const currentUserId = user?._id || user?.id;
+      const currentUserEmail = user?.email?.toLowerCase();
+
       if (isAdmin()) {
-        // Admin sees all expenses
+        // Admin sees all expenses (including HR)
         filteredExpenses = allExpenses;
       } else if (isHR()) {
-        // HR sees employee expenses (not other HR expenses)
-        filteredExpenses = allExpenses.filter(exp =>
-          exp.employeeRole !== 'hr' || exp.employeeId === user?._id || exp.employeeEmail === user?.email
-        );
+        // HR can see:
+        // 1. Their own expenses
+        // 2. Employee expenses (role = 'employee')
+        // HR CANNOT see other HR's expenses
+        filteredExpenses = allExpenses.filter(exp => {
+          const isOwnExpense = exp.employeeId === currentUserId ||
+                               exp.employeeEmail?.toLowerCase() === currentUserEmail;
+          const isEmployeeExpense = exp.employeeRole === 'employee';
+          return isOwnExpense || isEmployeeExpense;
+        });
       } else {
-        // Employee sees only their own expenses
-        filteredExpenses = allExpenses.filter(exp =>
-          exp.employeeId === user?._id || exp.employeeEmail === user?.email
-        );
+        // Employee sees ONLY their own expenses - NO OTHER EMPLOYEES
+        filteredExpenses = allExpenses.filter(exp => {
+          return exp.employeeId === currentUserId ||
+                 exp.employeeEmail?.toLowerCase() === currentUserEmail;
+        });
       }
 
       // Apply status and category filters
@@ -121,10 +133,12 @@ const Expenses = () => {
         date: formData.date,
         receipt: receiptPreview,
         status: 'pending',
-        employeeId: user?._id,
+        employeeId: user?._id || user?.id,
         employeeEmail: user?.email,
-        employeeName: user?.email?.split('@')[0] || 'Unknown',
+        employeeName: user?.firstName ? `${user.firstName} ${user.lastName || ''}`.trim() : (user?.email?.split('@')[0] || 'Unknown'),
         employeeRole: user?.role,
+        workLocation: user?.workLocation || 'IN',
+        currency: getCountryByCode(user?.workLocation || 'IN')?.currency || 'INR',
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       };
@@ -283,7 +297,7 @@ const Expenses = () => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
             <span className="text-sm font-medium text-emerald-700 dark:text-emerald-300">
-              Total: {formatCurrency(expenses.reduce((sum, exp) => sum + (exp.amount || 0), 0))}
+              Total: {formatCurrency(expenses.reduce((sum, exp) => sum + (exp.amount || 0), 0), user?.workLocation || 'IN')}
             </span>
           </div>
         </div>
@@ -315,7 +329,7 @@ const Expenses = () => {
               </div>
 
               <div className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-3">
-                {formatCurrency(expense.amount)}
+                {formatCurrency(expense.amount, expense.workLocation || 'IN')}
               </div>
 
               {expense.description && (

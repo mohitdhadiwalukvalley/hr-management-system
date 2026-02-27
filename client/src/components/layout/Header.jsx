@@ -1,35 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
-import { countries, getUserCountry, setUserCountry } from '../../utils/currency';
 
 const Header = ({ onMenuClick, title }) => {
   const { user, logout } = useAuth();
   const { theme, toggleTheme, isDark } = useTheme();
   const [showDropdown, setShowDropdown] = useState(false);
-  const [showLocationDropdown, setShowLocationDropdown] = useState(false);
-  const [currentCountry, setCurrentCountry] = useState(getUserCountry());
-
-  useEffect(() => {
-    // Listen for storage changes (in case user changes location in another tab)
-    const handleStorageChange = () => {
-      setCurrentCountry(getUserCountry());
-    };
-    window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
-  }, []);
-
-  const handleCountryChange = (countryCode) => {
-    setUserCountry(countryCode);
-    setCurrentCountry(getCountryByCode(countryCode));
-    setShowLocationDropdown(false);
-    // Dispatch custom event to notify other components
-    window.dispatchEvent(new CustomEvent('countryChange', { detail: countryCode }));
-  };
-
-  const getCountryByCode = (code) => {
-    return countries.find(c => c.code === code) || countries[0];
-  };
 
   const getRoleBadgeColor = (role) => {
     const colors = {
@@ -90,49 +66,6 @@ const Header = ({ onMenuClick, title }) => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
           </button>
-
-          {/* Location/Currency Selector */}
-          <div className="relative">
-            <button
-              onClick={() => setShowLocationDropdown(!showLocationDropdown)}
-              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-sm font-medium"
-              title="Change currency/location"
-            >
-              <span className="text-lg">{currentCountry.symbol}</span>
-              <span className="hidden sm:inline text-xs text-gray-500 dark:text-gray-400">{currentCountry.code}</span>
-              <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </svg>
-            </button>
-
-            {showLocationDropdown && (
-              <>
-                <div className="fixed inset-0 z-10" onClick={() => setShowLocationDropdown(false)} />
-                <div className="absolute right-0 mt-2 w-56 rounded-xl shadow-lg py-2 z-20 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 max-h-80 overflow-y-auto">
-                  <div className="px-3 py-2 border-b border-gray-200 dark:border-gray-700">
-                    <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Select Location</p>
-                  </div>
-                  <div className="py-1">
-                    {countries.map((country) => (
-                      <button
-                        key={country.code}
-                        onClick={() => handleCountryChange(country.code)}
-                        className={`w-full flex items-center gap-3 px-3 py-2 text-sm transition-colors ${
-                          currentCountry.code === country.code
-                            ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400'
-                            : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
-                        }`}
-                      >
-                        <span className="w-8 text-center font-medium">{country.symbol}</span>
-                        <span className="flex-1 text-left">{country.name}</span>
-                        <span className="text-xs text-gray-400">{country.currency}</span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </>
-            )}
-          </div>
 
           {/* Theme Toggle */}
           <button

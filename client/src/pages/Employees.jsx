@@ -5,7 +5,7 @@ import { employeeService } from '../services/employeeService';
 import { departmentService } from '../services/departmentService';
 import { Button, Input, Select, LoadingSpinner, Badge, Card, Modal, EmptyState, Avatar } from '../components/common';
 import { useAuth } from '../context/AuthContext';
-import { countries, getUserCountry } from '../utils/currency';
+import { countries, getUserCountry, getCountryByCode, getPhoneCode, getPhonePlaceholder, getCurrencySymbol } from '../utils/currency';
 
 const Employees = () => {
   const [employees, setEmployees] = useState([]);
@@ -532,29 +532,49 @@ const Employees = () => {
                   </p>
                 </div>
               )}
-              <Input
-                label="Phone"
-                value={formData.phone}
-                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                placeholder="+1 234 567 8900"
-              />
+              {/* Work Location / Country - Before Phone */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Work Location / Country</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Work Location / Country *</label>
                 <select
                   value={formData.workLocation || 'IN'}
-                  onChange={(e) => setFormData({ ...formData, workLocation: e.target.value })}
+                  onChange={(e) => setFormData({ ...formData, workLocation: e.target.value, phone: '' })}
                   className="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-600 rounded-lg text-sm
                            focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
                            hover:border-gray-300 dark:hover:border-gray-500 transition-all
                            bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+                  required
                 >
                   {countries.map((country) => (
                     <option key={country.code} value={country.code}>
-                      {country.name} ({country.symbol})
+                      {country.name} ({country.symbol} - {country.currency})
                     </option>
                   ))}
                 </select>
-                <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">Currency will be shown based on this location</p>
+                <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                  Time & currency will be shown based on this location
+                </p>
+              </div>
+              {/* Phone with country code */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Phone Number</label>
+                <div className="flex gap-2">
+                  <div className="w-24 flex-shrink-0">
+                    <div className="px-4 py-2.5 border border-gray-200 dark:border-gray-600 rounded-lg text-sm bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-300 flex items-center justify-center font-medium">
+                      {getPhoneCode(formData.workLocation || 'IN')}
+                    </div>
+                  </div>
+                  <input
+                    type="tel"
+                    value={formData.phone}
+                    onChange={(e) => setFormData({ ...formData, phone: e.target.value.replace(/[^0-9]/g, '') })}
+                    placeholder={getPhonePlaceholder(formData.workLocation || 'IN').split(' ')[1]}
+                    className="flex-1 px-4 py-2.5 border border-gray-200 dark:border-gray-600 rounded-lg text-sm
+                             focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
+                             hover:border-gray-300 dark:hover:border-gray-500 transition-all
+                             bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
+                             placeholder-gray-400 dark:placeholder-gray-500"
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -591,16 +611,24 @@ const Employees = () => {
                   <option value="contract">Contract</option>
                 </select>
               </div>
-              <Input
-                label="Basic Salary"
-                type="number"
-                value={formData.salary.basic}
-                onChange={(e) => setFormData({
-                  ...formData,
-                  salary: { ...formData.salary, basic: parseFloat(e.target.value) || 0 },
-                })}
-                placeholder="50000"
-              />
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+                  Basic Salary ({getCurrencySymbol(formData.workLocation || 'IN')})
+                </label>
+                <input
+                  type="number"
+                  value={formData.salary.basic}
+                  onChange={(e) => setFormData({
+                    ...formData,
+                    salary: { ...formData.salary, basic: parseFloat(e.target.value) || 0 },
+                  })}
+                  placeholder="50000"
+                  className="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-600 rounded-lg text-sm
+                           focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
+                           hover:border-gray-300 dark:hover:border-gray-500 transition-all
+                           bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+                />
+              </div>
             </div>
           </div>
 
