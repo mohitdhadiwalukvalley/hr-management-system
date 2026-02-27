@@ -128,7 +128,7 @@ const Reports = () => {
               </thead>
               <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
                 {reportData.report.map((item) => (
-                  <tr key={item.employee._id} className="hover:bg-gray-50 dark:bg-gray-800">
+                  <tr key={item.employee._id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
                     <td className="px-6 py-4">
                       <div>
                         <p className="font-medium text-gray-900 dark:text-gray-100">{item.employee.name}</p>
@@ -182,7 +182,7 @@ const Reports = () => {
               </thead>
               <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
                 {reportData.report.map((item) => (
-                  <tr key={item.employee._id} className="hover:bg-gray-50 dark:bg-gray-800">
+                  <tr key={item.employee._id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
                     <td className="px-6 py-4">
                       <div>
                         <p className="font-medium text-gray-900 dark:text-gray-100">{item.employee.name}</p>
@@ -237,7 +237,7 @@ const Reports = () => {
               </thead>
               <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
                 {reportData.payroll.map((item) => (
-                  <tr key={item._id} className="hover:bg-gray-50 dark:bg-gray-800">
+                  <tr key={item._id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
                     <td className="px-6 py-4">
                       <div>
                         <p className="font-medium text-gray-900 dark:text-gray-100">

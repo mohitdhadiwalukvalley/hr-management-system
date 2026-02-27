@@ -571,7 +571,7 @@ const Dashboard = () => {
             </thead>
             <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
               {employeeAttendanceData.slice(0, 10).map((emp) => (
-                <tr key={emp._id} className="hover:bg-gray-50 dark:bg-gray-800 transition-colors">
+                <tr key={emp._id} className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
                   <td className="py-3 px-4">
                     <div className="flex items-center gap-3">
                       <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center text-white text-xs font-medium">

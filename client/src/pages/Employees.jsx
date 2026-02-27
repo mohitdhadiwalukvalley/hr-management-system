@@ -302,7 +302,7 @@ const Employees = () => {
                 </tr>
               ) : (
                 employees.map((emp) => (
-                  <tr key={emp._id} className="hover:bg-gray-50 dark:bg-gray-800 transition-colors">
+                  <tr key={emp._id} className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
                         <Avatar
@@ -317,7 +317,7 @@ const Employees = () => {
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <code className="text-sm bg-gray-100 px-2 py-1 rounded text-gray-700">{emp.employeeId}</code>
+                      <code className="text-sm bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-gray-700 dark:text-gray-300">{emp.employeeId}</code>
                     </td>
                     <td className="px-6 py-4">
                       <span className="text-sm text-gray-600 dark:text-gray-300">{emp.department?.name || '-'}</span>
