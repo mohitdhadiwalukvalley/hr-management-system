@@ -17,6 +17,7 @@ const Leaves = lazy(() => import('./pages/Leaves'));
 const Onboarding = lazy(() => import('./pages/Onboarding'));
 const Payroll = lazy(() => import('./pages/Payroll'));
 const Reports = lazy(() => import('./pages/Reports'));
+const Expenses = lazy(() => import('./pages/Expenses'));
 
 // Loading fallback for lazy loaded pages
 const PageLoader = () => (
@@ -104,6 +105,9 @@ function App() {
               </ProtectedRoute>
             }
           />
+
+          {/* Expenses - all roles (employees see their own, HR expenses only visible to Admin) */}
+          <Route path="expenses" element={<Expenses />} />
         </Route>
 
         {/* Catch all route */}

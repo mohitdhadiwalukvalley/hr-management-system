@@ -6,3 +6,4 @@ export { leaveService } from './leaveService';
 export { onboardingService } from './onboardingService';
 export { payrollService } from './payrollService';
 export { reportService } from './reportService';
+export { expenseService } from './expenseService';
