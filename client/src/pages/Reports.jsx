@@ -4,6 +4,7 @@ import { reportService } from '../services/reportService';
 import { departmentService } from '../services/departmentService';
 import { LoadingSpinner, Badge, Card, StatsCard, EmptyState } from '../components/common';
 import { useAuth } from '../context/AuthContext';
+import { formatCurrency } from '../utils/currency';
 
 const Reports = () => {
   const [loading, setLoading] = useState(true);
@@ -80,13 +81,6 @@ const Reports = () => {
     } finally {
       setLoading(false);
     }
-  };
-
-  const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-    }).format(amount || 0);
   };
 
   const reportTypes = [

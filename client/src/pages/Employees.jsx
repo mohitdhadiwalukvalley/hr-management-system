@@ -5,6 +5,7 @@ import { employeeService } from '../services/employeeService';
 import { departmentService } from '../services/departmentService';
 import { Button, Input, Select, LoadingSpinner, Badge, Card, Modal, EmptyState, Avatar } from '../components/common';
 import { useAuth } from '../context/AuthContext';
+import { countries, getUserCountry } from '../utils/currency';
 
 const Employees = () => {
   const [employees, setEmployees] = useState([]);
@@ -22,6 +23,7 @@ const Employees = () => {
   const { isAdminOrHR, isAdmin, user } = useAuth();
 
   function getInitialFormData() {
+    const defaultCountry = getUserCountry();
     return {
       employeeId: '',
       firstName: '',
@@ -34,6 +36,7 @@ const Employees = () => {
       designation: '',
       dateOfJoining: '',
       employmentType: 'full-time',
+      workLocation: defaultCountry.code,
       salary: { basic: 0, allowances: [], deductions: [] },
       bankDetails: { accountNo: '', ifsc: '', bankName: '' },
       address: { street: '', city: '', state: '', country: '', zipCode: '' },
@@ -535,6 +538,24 @@ const Employees = () => {
                 onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                 placeholder="+1 234 567 8900"
               />
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Work Location / Country</label>
+                <select
+                  value={formData.workLocation || 'IN'}
+                  onChange={(e) => setFormData({ ...formData, workLocation: e.target.value })}
+                  className="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-600 rounded-lg text-sm
+                           focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
+                           hover:border-gray-300 dark:hover:border-gray-500 transition-all
+                           bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+                >
+                  {countries.map((country) => (
+                    <option key={country.code} value={country.code}>
+                      {country.name} ({country.symbol})
+                    </option>
+                  ))}
+                </select>
+                <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">Currency will be shown based on this location</p>
+              </div>
             </div>
           </div>
 

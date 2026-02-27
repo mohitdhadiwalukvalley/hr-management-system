@@ -4,6 +4,7 @@ import { payrollService } from '../services/payrollService';
 import { employeeService } from '../services/employeeService';
 import { Button, LoadingSpinner, Badge, Card, Modal, EmptyState, Avatar, StatsCard } from '../components/common';
 import { useAuth } from '../context/AuthContext';
+import { formatCurrency, getUserCountry, getCurrencySymbol } from '../utils/currency';
 
 const Payroll = () => {
   const [payrollList, setPayrollList] = useState([]);
@@ -146,13 +147,6 @@ const Payroll = () => {
       paid: 'success',
     };
     return <Badge variant={variants[status] || 'default'}>{status}</Badge>;
-  };
-
-  const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-    }).format(amount || 0);
   };
 
   const stats = {

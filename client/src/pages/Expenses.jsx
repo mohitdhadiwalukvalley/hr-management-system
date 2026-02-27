@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { Button, Input, Card, Badge, LoadingSpinner, Modal, EmptyState } from '../components/common';
 import { useAuth } from '../context/AuthContext';
+import { formatCurrency, getUserCountry } from '../utils/currency';
 
 // Local storage key for expenses
 const EXPENSES_KEY = 'hr_expenses';
@@ -211,13 +212,6 @@ const Expenses = () => {
       };
       reader.readAsDataURL(file);
     }
-  };
-
-  const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-    }).format(amount || 0);
   };
 
   const getStatusBadge = (status) => {
