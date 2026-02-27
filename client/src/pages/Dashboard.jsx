@@ -41,18 +41,21 @@ const Dashboard = () => {
 
         // Process employees - handle different response structures
         const employeesData = employeesRes.status === 'fulfilled' ? employeesRes.value : null;
-        const employees = employeesData?.data?.data || employeesData?.data?.employees || employeesData?.data || employeesData?.employees || [];
+        const allEmployees = employeesData?.data?.data || employeesData?.data?.employees || employeesData?.data || employeesData?.employees || [];
 
-        // Filter only active employees for counts
-        const activeEmployees = employees.filter(e => e.status === 'active' || !e.status);
+        // Filter only active employees for counts (exclude admin)
+        const activeEmployees = allEmployees.filter(e =>
+          (e.status === 'active' || !e.status) && e.role !== 'admin'
+        );
         const hrEmployees = activeEmployees.filter(e => e.role === 'hr');
+        const regularEmployees = activeEmployees.filter(e => e.role === 'employee');
 
         setAllEmployees(activeEmployees);
 
         // Process departments - handle different response structures
         const deptsData = departmentsRes.status === 'fulfilled' ? departmentsRes.value : null;
         const depts = deptsData?.data?.data || deptsData?.data?.departments || deptsData?.data || deptsData?.departments || [];
-        setDepartments(depts.slice(0, 5));
+        setDepartments(depts);
 
         // Process attendance - handle different response structures
         const attendanceData = attendanceRes.status === 'fulfilled' ? attendanceRes.value : null;
@@ -64,23 +67,31 @@ const Dashboard = () => {
         const leaves = leavesData?.data?.data || leavesData?.data?.leaves || leavesData?.data || leavesData?.leaves || [];
         setRecentLeaves(leaves.slice(0, 5));
 
-        // Calculate present today (employees who checked in)
-        const presentEmployeeIds = new Set(
-          attendance
-            .filter(a => a.checkIn || a.currentState === 'working' || a.currentState === 'lunch_break' || a.currentState === 'personal_break' || a.currentState === 'checked_out')
-            .map(a => a.employee?._id || a.employee)
-        );
+        // Get IDs of employees who checked in today
+        const activeEmployeeIds = new Set(activeEmployees.map(e => e._id));
 
-        const presentCount = presentEmployeeIds.size;
-        const absentCount = activeEmployees.length - presentCount;
+        // Count attendance records for active employees only
+        const presentEmployeeIds = new Set();
+        attendance.forEach(a => {
+          const empId = a.employee?._id || a.employee;
+          // Only count if this employee is in our active employees list
+          if (activeEmployeeIds.has(empId) && (a.checkIn || a.currentState)) {
+            presentEmployeeIds.add(empId);
+          }
+        });
+
+        // Calculate counts - ensure no negative numbers
+        const presentCount = Math.max(0, presentEmployeeIds.size);
+        const totalActiveCount = Math.max(0, activeEmployees.length);
+        const absentCount = Math.max(0, totalActiveCount - presentCount);
 
         setStats({
-          totalEmployees: activeEmployees.length,
-          totalHR: hrEmployees.length,
-          departments: depts.length,
+          totalEmployees: totalActiveCount,
+          totalHR: Math.max(0, hrEmployees.length),
+          departments: Math.max(0, depts.length),
           presentToday: presentCount,
           absentToday: absentCount,
-          pendingLeaves: leaves.length,
+          pendingLeaves: Math.max(0, leaves.length),
         });
       } else {
         // Employee: Fetch only own data
@@ -515,31 +526,31 @@ const Dashboard = () => {
         <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 mb-4">
           <div className="bg-green-50 dark:bg-green-900/30 rounded-lg p-3 text-center">
             <div className="text-2xl font-bold text-green-600 dark:text-green-400">
-              {employeeAttendanceData.filter(e => e.attendance?.currentState === 'working').length}
+              {Math.max(0, employeeAttendanceData.filter(e => e.attendance?.currentState === 'working').length)}
             </div>
             <div className="text-xs text-green-700 dark:text-green-300">Working</div>
           </div>
           <div className="bg-amber-50 dark:bg-amber-900/30 rounded-lg p-3 text-center">
             <div className="text-2xl font-bold text-amber-600 dark:text-amber-400">
-              {employeeAttendanceData.filter(e => ['lunch_break', 'personal_break'].includes(e.attendance?.currentState)).length}
+              {Math.max(0, employeeAttendanceData.filter(e => ['lunch_break', 'personal_break'].includes(e.attendance?.currentState)).length)}
             </div>
             <div className="text-xs text-amber-700 dark:text-amber-300">On Break</div>
           </div>
           <div className="bg-blue-50 dark:bg-blue-900/30 rounded-lg p-3 text-center">
             <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
-              {employeeAttendanceData.filter(e => e.attendance?.currentState === 'checked_out').length}
+              {Math.max(0, employeeAttendanceData.filter(e => e.attendance?.currentState === 'checked_out').length)}
             </div>
             <div className="text-xs text-blue-700 dark:text-blue-300">Checked Out</div>
           </div>
           <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 text-center">
             <div className="text-2xl font-bold text-gray-600 dark:text-gray-300">
-              {employeeAttendanceData.filter(e => !e.attendance || e.attendance?.currentState === 'not_checked_in').length}
+              {Math.max(0, employeeAttendanceData.filter(e => !e.attendance || e.attendance?.currentState === 'not_checked_in').length)}
             </div>
             <div className="text-xs text-gray-700 dark:text-gray-300">Not Checked In</div>
           </div>
           <div className="bg-purple-50 dark:bg-purple-900/30 rounded-lg p-3 text-center">
             <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">
-              {employeeAttendanceData.filter(e => e.attendance?.checkIn).length}
+              {Math.max(0, employeeAttendanceData.filter(e => e.attendance?.checkIn).length)}
             </div>
             <div className="text-xs text-purple-700 dark:text-purple-300">Total Present</div>
           </div>
