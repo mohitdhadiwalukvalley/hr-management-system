@@ -63,18 +63,22 @@ const Dashboard = () => {
         });
       } else {
         // Employee: Fetch only own data
-        const [leavesRes, allLeavesRes] = await Promise.allSettled([
-          leaveService.getAll({ status: 'pending' }),
-          leaveService.getMyLeaves(),
-        ]);
+        try {
+          const myLeavesRes = await leaveService.getMyLeaves();
 
-        // Process own leaves
-        const leaves = leavesRes.status === 'fulfilled' ? leavesRes.value.data?.data || [] : [];
-        setMyLeaves(leaves.slice(0, 3));
+          // Handle different API response structures
+          const myLeavesData = myLeavesRes.data?.leaves || myLeavesRes.data?.data || myLeavesRes.leaves || myLeavesRes.data || [];
 
-        // Get pending leaves count for employee
-        const myLeavesData = allLeavesRes.status === 'fulfilled' ? allLeavesRes.value.data?.data || [] : [];
-        setMyPendingLeavesCount(myLeavesData.filter(l => l.status === 'pending').length);
+          // Set my leaves for the list (show recent 3)
+          setMyLeaves(myLeavesData.slice(0, 3));
+
+          // Set pending leaves count
+          setMyPendingLeavesCount(myLeavesData.filter(l => l.status === 'pending').length);
+        } catch (error) {
+          console.error('Failed to fetch my leaves:', error);
+          setMyLeaves([]);
+          setMyPendingLeavesCount(0);
+        }
       }
     } catch (error) {
       console.error('Error fetching dashboard data:', error);
