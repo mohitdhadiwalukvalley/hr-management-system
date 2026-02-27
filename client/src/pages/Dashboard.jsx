@@ -9,6 +9,7 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState({
     totalEmployees: 0,
+    totalHR: 0,
     departments: 0,
     presentToday: 0,
     absentToday: 0,
@@ -38,27 +39,47 @@ const Dashboard = () => {
           leaveService.getAll({ status: 'pending' }),
         ]);
 
-        // Process employees
-        const employees = employeesRes.status === 'fulfilled' ? employeesRes.value.data?.data || [] : [];
-        setAllEmployees(employees);
+        // Process employees - handle different response structures
+        const employeesData = employeesRes.status === 'fulfilled' ? employeesRes.value : null;
+        const employees = employeesData?.data?.data || employeesData?.data?.employees || employeesData?.data || employeesData?.employees || [];
 
-        // Process departments
-        const depts = departmentsRes.status === 'fulfilled' ? departmentsRes.value.data?.data || [] : [];
+        // Filter only active employees for counts
+        const activeEmployees = employees.filter(e => e.status === 'active' || !e.status);
+        const hrEmployees = activeEmployees.filter(e => e.role === 'hr');
+
+        setAllEmployees(activeEmployees);
+
+        // Process departments - handle different response structures
+        const deptsData = departmentsRes.status === 'fulfilled' ? departmentsRes.value : null;
+        const depts = deptsData?.data?.data || deptsData?.data?.departments || deptsData?.data || deptsData?.departments || [];
         setDepartments(depts.slice(0, 5));
 
-        // Process attendance
-        const attendance = attendanceRes.status === 'fulfilled' ? attendanceRes.value.data?.data || [] : [];
+        // Process attendance - handle different response structures
+        const attendanceData = attendanceRes.status === 'fulfilled' ? attendanceRes.value : null;
+        const attendance = attendanceData?.data?.data || attendanceData?.data?.attendance || attendanceData?.data || attendanceData?.attendance || [];
         setTodayAttendance(attendance);
 
-        // Process leaves
-        const leaves = leavesRes.status === 'fulfilled' ? leavesRes.value.data?.data || [] : [];
+        // Process leaves - handle different response structures
+        const leavesData = leavesRes.status === 'fulfilled' ? leavesRes.value : null;
+        const leaves = leavesData?.data?.data || leavesData?.data?.leaves || leavesData?.data || leavesData?.leaves || [];
         setRecentLeaves(leaves.slice(0, 5));
 
+        // Calculate present today (employees who checked in)
+        const presentEmployeeIds = new Set(
+          attendance
+            .filter(a => a.checkIn || a.currentState === 'working' || a.currentState === 'lunch_break' || a.currentState === 'personal_break' || a.currentState === 'checked_out')
+            .map(a => a.employee?._id || a.employee)
+        );
+
+        const presentCount = presentEmployeeIds.size;
+        const absentCount = activeEmployees.length - presentCount;
+
         setStats({
-          totalEmployees: employees.length,
+          totalEmployees: activeEmployees.length,
+          totalHR: hrEmployees.length,
           departments: depts.length,
-          presentToday: attendance.filter(a => a.status === 'present' || a.status === 'working' || a.currentState === 'working').length,
-          absentToday: employees.length - attendance.filter(a => a.checkIn || a.currentState).length,
+          presentToday: presentCount,
+          absentToday: absentCount,
           pendingLeaves: leaves.length,
         });
       } else {
@@ -400,7 +421,7 @@ const Dashboard = () => {
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 lg:gap-6">
         <StatsCard
           title="Total Employees"
           value={stats.totalEmployees}
@@ -409,9 +430,27 @@ const Dashboard = () => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
             </svg>
           }
-          trend="+12%"
-          trendUp={true}
           color="blue"
+        />
+        <StatsCard
+          title="Total HR"
+          value={stats.totalHR}
+          icon={
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+            </svg>
+          }
+          color="indigo"
+        />
+        <StatsCard
+          title="Departments"
+          value={stats.departments}
+          icon={
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+            </svg>
+          }
+          color="purple"
         />
         <StatsCard
           title="Present Today"
@@ -421,7 +460,7 @@ const Dashboard = () => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           }
-          trend={`${Math.round((stats.presentToday / stats.totalEmployees) * 100) || 0}%`}
+          trend={stats.totalEmployees > 0 ? `${Math.round((stats.presentToday / stats.totalEmployees) * 100)}%` : '0%'}
           trendUp={true}
           color="emerald"
         />
@@ -434,16 +473,6 @@ const Dashboard = () => {
             </svg>
           }
           color="red"
-        />
-        <StatsCard
-          title="Departments"
-          value={stats.departments}
-          icon={
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-            </svg>
-          }
-          color="purple"
         />
       </div>
 
@@ -536,8 +565,20 @@ const Dashboard = () => {
                         {emp.firstName?.[0]}{emp.lastName?.[0]}
                       </div>
                       <div>
-                        <div className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                          {emp.firstName} {emp.lastName}
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                            {emp.firstName} {emp.lastName}
+                          </span>
+                          {emp.role === 'hr' && (
+                            <span className="text-xs px-1.5 py-0.5 rounded-full bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400 font-medium">
+                              HR
+                            </span>
+                          )}
+                          {emp.role === 'admin' && (
+                            <span className="text-xs px-1.5 py-0.5 rounded-full bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 font-medium">
+                              Admin
+                            </span>
+                          )}
                         </div>
                         <div className="text-xs text-gray-500 dark:text-gray-400">{emp.employeeId}</div>
                       </div>
