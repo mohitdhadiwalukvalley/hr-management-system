@@ -17,23 +17,12 @@ createRoot(document.getElementById('root')).render(
             position="top-right"
             toastOptions={{
               duration: 3000,
-              style: {
-                background: 'var(--surface-card)',
-                color: 'var(--text-primary)',
-                border: '1px solid var(--border-default)',
-                boxShadow: 'var(--shadow-lg)',
-              },
+              className: 'bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-700 shadow-lg',
               success: {
-                iconTheme: {
-                  primary: 'var(--color-success)',
-                  secondary: 'var(--surface-card)',
-                },
+                className: 'bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border-emerald-200 dark:border-emerald-800',
               },
               error: {
-                iconTheme: {
-                  primary: 'var(--color-error)',
-                  secondary: 'var(--surface-card)',
-                },
+                className: 'bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border-red-200 dark:border-red-800',
               },
             }}
           />
