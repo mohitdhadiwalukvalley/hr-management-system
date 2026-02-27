@@ -10,7 +10,7 @@ const StatsCard = ({
 }) => {
   const getTrendColor = () => {
     if (!trend) return '';
-    return trend === 'up' ? 'var(--color-success)' : 'var(--color-error)';
+    return trend === 'up' ? 'text-emerald-500 dark:text-emerald-400' : 'text-red-500 dark:text-red-400';
   };
 
   const getTrendIcon = () => {
@@ -26,59 +26,36 @@ const StatsCard = ({
     );
   };
 
-  const getIconBg = () => {
-    const colors = {
-      blue: 'rgba(99, 102, 241, 0.1)',
-      emerald: 'rgba(16, 185, 129, 0.1)',
-      amber: 'rgba(245, 158, 11, 0.1)',
-      purple: 'rgba(139, 92, 246, 0.1)',
-      red: 'rgba(239, 68, 68, 0.1)',
-    };
-    return colors[color] || colors.blue;
-  };
-
-  const getIconColor = () => {
-    const colors = {
-      blue: '#6366f1',
-      emerald: '#10b981',
-      amber: '#f59e0b',
-      purple: '#8b5cf6',
-      red: '#ef4444',
-    };
-    return colors[color] || colors.blue;
+  const colorStyles = {
+    blue: 'bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400',
+    emerald: 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400',
+    amber: 'bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400',
+    purple: 'bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400',
+    red: 'bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400',
   };
 
   return (
-    <div
-      className={`rounded-xl p-6 shadow-sm hover:shadow-md transition-all theme-transition ${className}`}
-      style={{
-        backgroundColor: 'var(--surface-card)',
-        border: '1px solid var(--border-default)',
-      }}
-    >
+    <div className={`rounded-xl p-6 shadow-sm hover:shadow-md transition-all bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 ${className}`}>
       <div className="flex items-start justify-between">
         <div className="flex-1">
-          <p className="text-sm font-medium" style={{ color: 'var(--text-muted)' }}>{title}</p>
-          <p className="mt-2 text-3xl font-bold" style={{ color: 'var(--text-primary)' }}>{value}</p>
+          <p className="text-sm font-medium text-gray-500 dark:text-gray-400">{title}</p>
+          <p className="mt-2 text-3xl font-bold text-gray-900 dark:text-gray-100">{value}</p>
           {(subtitle || trend) && (
             <div className="mt-2 flex items-center gap-2">
               {trend && (
-                <span className="flex items-center gap-0.5 text-sm font-medium" style={{ color: getTrendColor() }}>
+                <span className={`flex items-center gap-0.5 text-sm font-medium ${getTrendColor()}`}>
                   {getTrendIcon()}
                   {trendValue}
                 </span>
               )}
               {subtitle && (
-                <span className="text-sm" style={{ color: 'var(--text-muted)' }}>{subtitle}</span>
+                <span className="text-sm text-gray-500 dark:text-gray-400">{subtitle}</span>
               )}
             </div>
           )}
         </div>
         {icon && (
-          <div
-            className="p-3 rounded-xl"
-            style={{ backgroundColor: getIconBg(), color: getIconColor() }}
-          >
+          <div className={`p-3 rounded-xl ${colorStyles[color] || colorStyles.blue}`}>
             {icon}
           </div>
         )}

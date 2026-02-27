@@ -60,42 +60,27 @@ const Modal = ({
             relative w-full ${sizes[size]}
             rounded-xl shadow-2xl
             transform transition-all
-            animate-scale-in theme-transition
+            bg-white dark:bg-gray-800
+            border border-gray-200 dark:border-gray-700
           `}
-          style={{
-            backgroundColor: 'var(--surface-card)',
-            boxShadow: 'var(--shadow-xl)',
-          }}
         >
           {/* Header */}
           {(title || showCloseButton) && (
-            <div
-              className="flex items-start justify-between px-6 py-4"
-              style={{ borderBottom: '1px solid var(--border-default)' }}
-            >
+            <div className="flex items-start justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-700">
               <div>
                 {title && (
-                  <h2 id="modal-title" className="text-lg font-semibold" style={{ color: 'var(--text-primary)' }}>
+                  <h2 id="modal-title" className="text-lg font-semibold text-gray-900 dark:text-gray-100">
                     {title}
                   </h2>
                 )}
                 {description && (
-                  <p className="mt-1 text-sm" style={{ color: 'var(--text-muted)' }}>{description}</p>
+                  <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">{description}</p>
                 )}
               </div>
               {showCloseButton && (
                 <button
                   onClick={onClose}
-                  className="p-1.5 rounded-lg transition-colors"
-                  style={{ color: 'var(--text-muted)' }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = 'var(--bg-hover)';
-                    e.currentTarget.style.color = 'var(--text-primary)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = 'transparent';
-                    e.currentTarget.style.color = 'var(--text-muted)';
-                  }}
+                  className="p-1.5 rounded-lg text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                 >
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -106,19 +91,13 @@ const Modal = ({
           )}
 
           {/* Body */}
-          <div className="px-6 py-4 max-h-[60vh] overflow-y-auto" style={{ color: 'var(--text-secondary)' }}>
+          <div className="px-6 py-4 max-h-[60vh] overflow-y-auto text-gray-700 dark:text-gray-300">
             {children}
           </div>
 
           {/* Footer */}
           {footer && (
-            <div
-              className="px-6 py-4 rounded-b-xl flex justify-end gap-3"
-              style={{
-                borderTop: '1px solid var(--border-default)',
-                backgroundColor: 'var(--bg-tertiary)'
-              }}
-            >
+            <div className="px-6 py-4 rounded-b-xl flex justify-end gap-3 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900">
               {footer}
             </div>
           )}
@@ -157,7 +136,7 @@ export const ConfirmModal = ({
         </>
       }
     >
-      <p style={{ color: 'var(--text-secondary)' }}>{message}</p>
+      <p className="text-gray-600 dark:text-gray-400">{message}</p>
     </Modal>
   );
 };

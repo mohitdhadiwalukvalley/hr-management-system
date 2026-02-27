@@ -1,5 +1,3 @@
-import { useTheme } from '../../context/ThemeContext';
-
 const Badge = ({
   children,
   variant = 'neutral',
@@ -7,48 +5,15 @@ const Badge = ({
   dot = false,
   className = ''
 }) => {
-  const { isDark } = useTheme();
-
-  const getVariantStyles = () => {
-    const styles = {
-      success: {
-        bg: isDark ? 'rgba(16, 185, 129, 0.15)' : '#d1fae5',
-        color: isDark ? '#34d399' : '#047857',
-        border: isDark ? 'rgba(16, 185, 129, 0.3)' : '#a7f3d0',
-        dot: '#10b981'
-      },
-      warning: {
-        bg: isDark ? 'rgba(245, 158, 11, 0.15)' : '#fef3c7',
-        color: isDark ? '#fbbf24' : '#b45309',
-        border: isDark ? 'rgba(245, 158, 11, 0.3)' : '#fde68a',
-        dot: '#f59e0b'
-      },
-      error: {
-        bg: isDark ? 'rgba(239, 68, 68, 0.15)' : '#fee2e2',
-        color: isDark ? '#f87171' : '#b91c1c',
-        border: isDark ? 'rgba(239, 68, 68, 0.3)' : '#fecaca',
-        dot: '#ef4444'
-      },
-      info: {
-        bg: isDark ? 'rgba(59, 130, 246, 0.15)' : '#dbeafe',
-        color: isDark ? '#60a5fa' : '#1d4ed8',
-        border: isDark ? 'rgba(59, 130, 246, 0.3)' : '#bfdbfe',
-        dot: '#3b82f6'
-      },
-      neutral: {
-        bg: isDark ? 'rgba(100, 116, 139, 0.15)' : '#f1f5f9',
-        color: isDark ? '#94a3b8' : '#475569',
-        border: isDark ? 'rgba(100, 116, 139, 0.3)' : '#e2e8f0',
-        dot: '#64748b'
-      },
-      primary: {
-        bg: isDark ? 'rgba(99, 102, 241, 0.15)' : '#e0e7ff',
-        color: isDark ? '#818cf8' : '#4338ca',
-        border: isDark ? 'rgba(99, 102, 241, 0.3)' : '#c7d2fe',
-        dot: '#6366f1'
-      },
-    };
-    return styles[variant] || styles.neutral;
+  const variants = {
+    success: 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800',
+    warning: 'bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 border-amber-200 dark:border-amber-800',
+    error: 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 border-red-200 dark:border-red-800',
+    info: 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 border-blue-200 dark:border-blue-800',
+    neutral: 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-600',
+    primary: 'bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400 border-indigo-200 dark:border-indigo-800',
+    danger: 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 border-red-200 dark:border-red-800',
+    default: 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-600',
   };
 
   const sizes = {
@@ -57,26 +22,28 @@ const Badge = ({
     lg: 'px-3 py-1 text-sm',
   };
 
-  const variantStyles = getVariantStyles();
+  const dotColors = {
+    success: 'bg-emerald-500',
+    warning: 'bg-amber-500',
+    error: 'bg-red-500',
+    info: 'bg-blue-500',
+    neutral: 'bg-gray-500',
+    primary: 'bg-indigo-500',
+    danger: 'bg-red-500',
+    default: 'bg-gray-500',
+  };
 
   return (
     <span
       className={`
-        inline-flex items-center gap-1.5 font-medium rounded-full border theme-transition
+        inline-flex items-center gap-1.5 font-medium rounded-full border
+        ${variants[variant] || variants.default}
         ${sizes[size]}
         ${className}
       `}
-      style={{
-        backgroundColor: variantStyles.bg,
-        color: variantStyles.color,
-        borderColor: variantStyles.border,
-      }}
     >
       {dot && (
-        <span
-          className="w-1.5 h-1.5 rounded-full"
-          style={{ backgroundColor: variantStyles.dot }}
-        />
+        <span className={`w-1.5 h-1.5 rounded-full ${dotColors[variant] || dotColors.default}`} />
       )}
       {children}
     </span>

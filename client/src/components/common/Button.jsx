@@ -11,48 +11,15 @@ const Button = ({
   onClick,
   ...props
 }) => {
-  const baseStyles = 'inline-flex items-center justify-center gap-2 font-medium rounded-lg transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98] theme-transition';
+  const baseStyles = 'inline-flex items-center justify-center gap-2 font-medium rounded-lg transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-gray-900 disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98]';
 
-  const getVariantStyles = () => {
-    switch (variant) {
-      case 'primary':
-        return {
-          background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
-          color: '#ffffff',
-          boxShadow: 'var(--shadow-sm)',
-        };
-      case 'secondary':
-        return {
-          backgroundColor: 'var(--bg-primary)',
-          color: 'var(--text-secondary)',
-          border: '1px solid var(--border-default)',
-        };
-      case 'danger':
-        return {
-          background: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)',
-          color: '#ffffff',
-          boxShadow: 'var(--shadow-sm)',
-        };
-      case 'success':
-        return {
-          background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
-          color: '#ffffff',
-          boxShadow: 'var(--shadow-sm)',
-        };
-      case 'ghost':
-        return {
-          backgroundColor: 'transparent',
-          color: 'var(--text-secondary)',
-        };
-      case 'outline':
-        return {
-          backgroundColor: 'transparent',
-          color: 'var(--color-info)',
-          border: '2px solid var(--color-info)',
-        };
-      default:
-        return {};
-    }
+  const variants = {
+    primary: 'bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white shadow-sm',
+    secondary: 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700',
+    danger: 'bg-red-600 hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-600 text-white shadow-sm',
+    success: 'bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-600 text-white shadow-sm',
+    ghost: 'bg-transparent text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800',
+    outline: 'bg-transparent text-blue-600 dark:text-blue-400 border-2 border-blue-600 dark:border-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20',
   };
 
   const sizes = {
@@ -61,34 +28,12 @@ const Button = ({
     lg: 'px-6 py-3 text-base',
   };
 
-  const handleMouseEnter = (e) => {
-    if (disabled || loading) return;
-    if (variant === 'secondary') {
-      e.currentTarget.style.backgroundColor = 'var(--bg-hover)';
-    } else if (variant === 'ghost') {
-      e.currentTarget.style.backgroundColor = 'var(--bg-hover)';
-      e.currentTarget.style.color = 'var(--text-primary)';
-    }
-  };
-
-  const handleMouseLeave = (e) => {
-    if (variant === 'secondary') {
-      e.currentTarget.style.backgroundColor = 'var(--bg-primary)';
-    } else if (variant === 'ghost') {
-      e.currentTarget.style.backgroundColor = 'transparent';
-      e.currentTarget.style.color = 'var(--text-secondary)';
-    }
-  };
-
   return (
     <button
       type={type}
       disabled={disabled || loading}
-      className={`${baseStyles} ${sizes[size]} ${className}`}
-      style={getVariantStyles()}
+      className={`${baseStyles} ${variants[variant] || variants.primary} ${sizes[size]} ${className}`}
       onClick={onClick}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
       {...props}
     >
       {loading ? (

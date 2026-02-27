@@ -83,16 +83,12 @@ const Sidebar = ({ isOpen, onClose }) => {
           transform transition-transform duration-300 ease-in-out
           lg:translate-x-0 lg:static lg:inset-auto
           ${isOpen ? 'translate-x-0' : '-translate-x-full'}
-          theme-transition
+          bg-white dark:bg-gray-800
+          border-r border-gray-200 dark:border-gray-700
         `}
-        style={{
-          backgroundColor: 'var(--surface-card)',
-          borderRight: '1px solid var(--border-default)',
-        }}
       >
         {/* Logo */}
-        <div className="h-16 flex items-center px-6 border-b theme-transition"
-          style={{ borderColor: 'var(--border-default)' }}>
+        <div className="h-16 flex items-center px-6 border-b border-gray-200 dark:border-gray-700">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-sm">
               <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -100,8 +96,8 @@ const Sidebar = ({ isOpen, onClose }) => {
               </svg>
             </div>
             <div>
-              <h1 className="text-lg font-bold" style={{ color: 'var(--text-primary)' }}>HR System</h1>
-              <p className="text-[10px] tracking-wide" style={{ color: 'var(--text-muted)' }}>WORKFORCE MANAGEMENT</p>
+              <h1 className="text-lg font-bold text-gray-900 dark:text-gray-100">HR System</h1>
+              <p className="text-[10px] tracking-wide text-gray-500 dark:text-gray-400">WORKFORCE MANAGEMENT</p>
             </div>
           </div>
         </div>
@@ -115,29 +111,14 @@ const Sidebar = ({ isOpen, onClose }) => {
                   to={item.href}
                   onClick={onClose}
                   className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium
-                    transition-all duration-200 theme-transition`}
-                  style={{
-                    color: isActiveRoute(item.href)
-                      ? 'var(--color-info)'
-                      : 'var(--text-secondary)',
-                    backgroundColor: isActiveRoute(item.href)
-                      ? 'var(--color-info-bg)'
-                      : 'transparent',
-                  }}
-                  onMouseEnter={(e) => {
-                    if (!isActiveRoute(item.href)) {
-                      e.currentTarget.style.backgroundColor = 'var(--bg-hover)';
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    if (!isActiveRoute(item.href)) {
-                      e.currentTarget.style.backgroundColor = 'transparent';
-                    }
-                  }}
+                    transition-all duration-200
+                    ${isActiveRoute(item.href)
+                      ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400'
+                      : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                    }`}
                 >
                   <svg
-                    className="w-5 h-5 flex-shrink-0"
-                    style={{ color: isActiveRoute(item.href) ? 'var(--color-info)' : 'var(--text-muted)' }}
+                    className={`w-5 h-5 flex-shrink-0 ${isActiveRoute(item.href) ? 'text-blue-600 dark:text-blue-400' : 'text-gray-400 dark:text-gray-500'}`}
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -152,22 +133,18 @@ const Sidebar = ({ isOpen, onClose }) => {
         </nav>
 
         {/* User section at bottom */}
-        <div className="p-4 border-t theme-transition" style={{ borderColor: 'var(--border-default)', backgroundColor: 'var(--bg-tertiary)' }}>
-          <div
-            className="flex items-center gap-3 px-2 py-2 rounded-lg cursor-pointer transition-colors"
-            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--bg-hover)'}
-            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
-          >
+        <div className="p-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900">
+          <div className="flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors cursor-pointer">
             <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center text-white font-medium text-sm shadow-sm">
               {user?.email?.charAt(0).toUpperCase()}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium truncate" style={{ color: 'var(--text-primary)' }}>
+              <p className="text-sm font-medium truncate text-gray-900 dark:text-gray-100">
                 {user?.email?.split('@')[0]}
               </p>
-              <p className="text-xs capitalize" style={{ color: 'var(--text-muted)' }}>{user?.role}</p>
+              <p className="text-xs capitalize text-gray-500 dark:text-gray-400">{user?.role}</p>
             </div>
-            <svg className="w-4 h-4" style={{ color: 'var(--text-muted)' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
             </svg>
           </div>
