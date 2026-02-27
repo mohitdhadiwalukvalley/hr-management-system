@@ -2,8 +2,11 @@ import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { attendanceService } from '../../services/attendanceService';
 import { Button, Card, Badge } from '../common';
+import { useAuth } from '../../context/AuthContext';
+import { getTimezone, getCountryByCode, getCurrentTimeInTimezone } from '../../utils/currency';
 
 const AttendanceWidget = () => {
+  const { user } = useAuth();
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -16,6 +19,10 @@ const AttendanceWidget = () => {
     lunchBreak: null,
   });
   const [employee, setEmployee] = useState(null);
+
+  // Get user's work location for timezone
+  const workLocation = user?.workLocation || employee?.workLocation || 'IN';
+  const userTimezone = getTimezone(workLocation);
 
   // Update current time every second
   useEffect(() => {
@@ -135,27 +142,47 @@ const AttendanceWidget = () => {
     return totalSeconds;
   };
 
-  // Get current time string with seconds
+  // Get current time string with seconds in user's timezone
   const getCurrentTimeStr = () => {
-    return currentTime.toLocaleTimeString('en-US', {
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-      hour12: true,
-    });
+    try {
+      return currentTime.toLocaleTimeString('en-US', {
+        timeZone: userTimezone,
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: true,
+      });
+    } catch (e) {
+      return currentTime.toLocaleTimeString('en-US', {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: true,
+      });
+    }
   };
 
-  // Get last check-in time
+  // Get last check-in time in user's timezone
   const getLastCheckInTime = () => {
     if (status.workSessions?.length > 0) {
       const lastSession = status.workSessions[status.workSessions.length - 1];
       if (lastSession?.checkIn) {
-        return new Date(lastSession.checkIn).toLocaleTimeString('en-US', {
-          hour: '2-digit',
-          minute: '2-digit',
-          second: '2-digit',
-          hour12: true,
-        });
+        try {
+          return new Date(lastSession.checkIn).toLocaleTimeString('en-US', {
+            timeZone: userTimezone,
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: true,
+          });
+        } catch (e) {
+          return new Date(lastSession.checkIn).toLocaleTimeString('en-US', {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: true,
+          });
+        }
       }
     }
     return null;
@@ -232,12 +259,27 @@ const AttendanceWidget = () => {
           {getCurrentTimeStr()}
         </div>
         <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-          {currentTime.toLocaleDateString('en-US', {
-            weekday: 'long',
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-          })}
+          {(() => {
+            try {
+              return currentTime.toLocaleDateString('en-US', {
+                timeZone: userTimezone,
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+              });
+            } catch (e) {
+              return currentTime.toLocaleDateString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+              });
+            }
+          })()}
+        </div>
+        <div className="text-xs text-blue-600 dark:text-blue-400 mt-1 font-medium">
+          📍 {getCountryByCode(workLocation)?.name} ({userTimezone})
         </div>
         {getLastCheckInTime() && status.currentState === 'working' && (
           <div className="text-xs text-green-600 dark:text-green-400 mt-2 font-medium">

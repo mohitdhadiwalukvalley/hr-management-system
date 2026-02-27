@@ -420,15 +420,23 @@ const Expenses = () => {
             placeholder="e.g., Client Meeting Lunch"
           />
           <div className="grid grid-cols-2 gap-4">
-            <Input
-              label="Amount ($)"
-              type="number"
-              step="0.01"
-              value={formData.amount}
-              onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
-              required
-              placeholder="0.00"
-            />
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+                Amount ({getCurrencySymbol(user?.workLocation || 'IN')})
+              </label>
+              <input
+                type="number"
+                step="0.01"
+                value={formData.amount}
+                onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
+                required
+                placeholder="0.00"
+                className="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-600 rounded-lg text-sm
+                         focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
+                         hover:border-gray-300 dark:hover:border-gray-500 transition-all
+                         bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+              />
+            </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Category</label>
               <select
@@ -508,7 +516,12 @@ const Expenses = () => {
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <p className="text-sm text-gray-500 dark:text-gray-400">Amount</p>
-                <p className="text-xl font-bold text-gray-900 dark:text-gray-100">{formatCurrency(selectedExpense.amount)}</p>
+                <p className="text-xl font-bold text-gray-900 dark:text-gray-100">
+                  {formatCurrency(selectedExpense.amount, selectedExpense.workLocation || 'IN')}
+                </p>
+                <p className="text-xs text-gray-400">
+                  {getCountryByCode(selectedExpense.workLocation || 'IN')?.currency} - {getCountryByCode(selectedExpense.workLocation || 'IN')?.name}
+                </p>
               </div>
               <div>
                 <p className="text-sm text-gray-500 dark:text-gray-400">Category</p>
