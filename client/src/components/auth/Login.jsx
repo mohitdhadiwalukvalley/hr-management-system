@@ -130,8 +130,8 @@ const Login = () => {
           <p className="text-xs text-blue-700 font-medium mb-2">Demo Credentials:</p>
           <div className="text-xs text-blue-600 space-y-1">
             <p><span className="font-medium">Admin:</span> admin@test.com / password123</p>
-            <p><span className="font-medium">HR:</span> hr@test.com / password123</p>
-            <p className="mt-2 text-blue-500">Contact admin to create employee accounts</p>
+            <p><span className="font-medium">Employee:</span> test@gmail.com / password123</p>
+            <p><span className="font-medium">Employee:</span> mohitdhadiwal.ukvalley@gmail.com / password123</p>
           </div>
         </div>
       </div>
