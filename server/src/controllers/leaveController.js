@@ -344,6 +344,64 @@ export const getMyLeaves = asyncHandler(async (req, res) => {
   );
 });
 
+// Apply for leave (employee self-service)
+export const applyMyLeave = asyncHandler(async (req, res) => {
+  const employee = await Employee.findOne({ userId: req.user._id });
+  if (!employee) {
+    throw ApiError.notFound('Employee profile not found');
+  }
+
+  const { leaveType, startDate, endDate, reason, halfDay, halfDayType, attachment } = req.body;
+
+  // Calculate days
+  const days = Leave.calculateDays(startDate, endDate, halfDay);
+
+  // Check if dates are valid
+  if (new Date(startDate) > new Date(endDate)) {
+    throw ApiError.badRequest('Start date cannot be after end date');
+  }
+
+  // Check for overlapping leaves
+  const overlappingLeave = await Leave.findOne({
+    employee: employee._id,
+    status: { $in: ['pending', 'approved'] },
+    $or: [
+      { startDate: { $lte: endDate }, endDate: { $gte: startDate } },
+    ],
+  });
+
+  if (overlappingLeave) {
+    throw ApiError.conflict('You already have a leave request for these dates');
+  }
+
+  // Check leave balance
+  const balance = await getLeaveBalanceForEmployee(employee._id, leaveType);
+  if (balance.available < days) {
+    throw ApiError.badRequest(`Insufficient ${leaveType} leave balance. Available: ${balance.available}`);
+  }
+
+  const leave = await Leave.create({
+    employee: employee._id,
+    leaveType,
+    startDate: new Date(startDate),
+    endDate: new Date(endDate),
+    days,
+    reason,
+    halfDay: halfDay || false,
+    halfDayType,
+    attachment,
+  });
+
+  const populatedLeave = await Leave.findById(leave._id)
+    .populate('employee', 'firstName lastName employeeId');
+
+  res
+    .status(201)
+    .json(
+      ApiResponse.created({ leave: populatedLeave }, 'Leave request submitted successfully')
+    );
+});
+
 // Delete leave
 export const deleteLeave = asyncHandler(async (req, res) => {
   const leave = await Leave.findById(req.params.id);

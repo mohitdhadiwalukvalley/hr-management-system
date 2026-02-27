@@ -14,6 +14,7 @@ import attendanceRoutes from './routes/attendanceRoutes.js';
 import leaveRoutes from './routes/leaveRoutes.js';
 import onboardingRoutes from './routes/onboardingRoutes.js';
 import payrollRoutes from './routes/payrollRoutes.js';
+import reportRoutes from './routes/reportRoutes.js';
 
 // Connect to database
 connectDB();
@@ -26,7 +27,7 @@ app.use(helmet());
 // CORS configuration
 app.use(
   cors({
-    origin: config.frontendUrl,
+    origin: ['http://localhost:5173', 'http://localhost:5174', 'http://localhost:5175', 'http://localhost:5176', config.frontendUrl],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
     allowedHeaders: ['Content-Type', 'Authorization'],
@@ -54,6 +55,7 @@ app.use('/api/attendance', attendanceRoutes);
 app.use('/api/leaves', leaveRoutes);
 app.use('/api/onboarding', onboardingRoutes);
 app.use('/api/payroll', payrollRoutes);
+app.use('/api/reports', reportRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {

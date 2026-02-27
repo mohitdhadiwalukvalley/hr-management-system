@@ -89,6 +89,8 @@ export const createEmployee = asyncHandler(async (req, res) => {
     firstName,
     lastName,
     email,
+    password, // Password for employee login
+    role = 'employee', // User role: admin, hr, or employee
     phone,
     dateOfBirth,
     gender,
@@ -104,6 +106,11 @@ export const createEmployee = asyncHandler(async (req, res) => {
     employmentHistory,
   } = req.body;
 
+  // Prevent HR from creating admin accounts
+  if (req.user.role === 'hr' && (role === 'admin' || role === 'hr')) {
+    throw ApiError.forbidden('HR can only create employee accounts');
+  }
+
   // Check if employee with same employeeId or email exists
   const existingEmployee = await Employee.findOne({
     $or: [{ employeeId: employeeId.toUpperCase() }, { email: email.toLowerCase() }],
@@ -111,6 +118,12 @@ export const createEmployee = asyncHandler(async (req, res) => {
 
   if (existingEmployee) {
     throw ApiError.conflict('Employee with this ID or email already exists');
+  }
+
+  // Check if user with same email already exists
+  const existingUser = await User.findOne({ email: email.toLowerCase() });
+  if (existingUser) {
+    throw ApiError.conflict('A user with this email already exists');
   }
 
   // Verify department exists
@@ -140,11 +153,12 @@ export const createEmployee = asyncHandler(async (req, res) => {
     employmentHistory,
   });
 
-  // Create user account for the employee
+  // Create user account for the employee with provided password and role
+  const userPassword = (password || 'changeme123').trim();
   const user = await User.create({
     email: email.toLowerCase(),
-    password: 'changeme123', // Default password, should be changed on first login
-    role: 'employee',
+    password: userPassword,
+    role: role,
     employeeId: employee._id,
   });
 
@@ -156,10 +170,17 @@ export const createEmployee = asyncHandler(async (req, res) => {
     .populate('department', 'name code')
     .populate('reportingManager', 'firstName lastName employeeId');
 
+  // Include login credentials in response for admin to share with employee
   res
     .status(201)
     .json(
-      ApiResponse.created({ employee: populatedEmployee }, 'Employee created successfully')
+      ApiResponse.created({
+        employee: populatedEmployee,
+        credentials: {
+          email: email.toLowerCase(),
+          password: password ? '********' : 'changeme123 (default)',
+        },
+      }, 'Employee created successfully')
     );
 });
 
@@ -213,11 +234,30 @@ export const updateEmployee = asyncHandler(async (req, res) => {
     employee.department = req.body.department;
   }
 
+  // Update user role if provided (Admin only)
+  if (req.body.role && employee.userId) {
+    // Prevent HR from changing roles to admin/hr
+    if (req.user.role === 'hr' && (req.body.role === 'admin' || req.body.role === 'hr')) {
+      throw ApiError.forbidden('HR can only assign employee role');
+    }
+    await User.findByIdAndUpdate(employee.userId, { role: req.body.role });
+  }
+
+  // Update password if provided
+  if (req.body.password && employee.userId) {
+    const user = await User.findById(employee.userId);
+    if (user) {
+      user.password = req.body.password;
+      await user.save();
+    }
+  }
+
   await employee.save();
 
   const updatedEmployee = await Employee.findById(employee._id)
     .populate('department', 'name code')
-    .populate('reportingManager', 'firstName lastName employeeId');
+    .populate('reportingManager', 'firstName lastName employeeId')
+    .populate('userId', 'email role');
 
   res.json(ApiResponse.success({ employee: updatedEmployee }, 'Employee updated successfully'));
 });
@@ -252,18 +292,15 @@ export const deleteEmployee = asyncHandler(async (req, res) => {
     throw ApiError.notFound('Employee not found');
   }
 
-  // Soft delete by changing status
-  employee.status = 'terminated';
-  employee.dateOfLeaving = new Date();
-
-  // Deactivate user account
+  // Delete associated user account
   if (employee.userId) {
-    await User.findByIdAndUpdate(employee.userId, { isActive: false });
+    await User.findByIdAndDelete(employee.userId);
   }
 
-  await employee.save();
+  // Hard delete the employee
+  await Employee.findByIdAndDelete(req.params.id);
 
-  res.json(ApiResponse.success(null, 'Employee deactivated successfully'));
+  res.json(ApiResponse.success(null, 'Employee deleted successfully'));
 });
 
 export const getEmployeeStats = asyncHandler(async (req, res) => {

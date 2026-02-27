@@ -16,6 +16,12 @@ export const leaveService = {
     return response.data;
   },
 
+  // Employee self-service apply
+  async applyMyLeave(data) {
+    const response = await api.post('/leaves/my-leave', data);
+    return response.data;
+  },
+
   async update(id, data) {
     const response = await api.put(`/leaves/${id}`, data);
     return response.data;

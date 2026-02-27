@@ -8,15 +8,18 @@ export const getAllDepartments = asyncHandler(async (req, res) => {
 
   const query = {};
 
+  // Default to showing only active departments unless explicitly requested
+  if (isActive !== undefined) {
+    query.isActive = isActive === 'true';
+  } else {
+    query.isActive = true;
+  }
+
   if (search) {
     query.$or = [
       { name: { $regex: search, $options: 'i' } },
       { code: { $regex: search, $options: 'i' } },
     ];
-  }
-
-  if (isActive !== undefined) {
-    query.isActive = isActive === 'true';
   }
 
   const departments = await Department.find(query)
@@ -134,11 +137,18 @@ export const deleteDepartment = asyncHandler(async (req, res) => {
     throw ApiError.notFound('Department not found');
   }
 
-  // Soft delete by setting isActive to false
-  department.isActive = false;
-  await department.save();
+  // Check if there are employees in this department
+  const Employee = (await import('../models/Employee.js')).default;
+  const employeeCount = await Employee.countDocuments({ department: req.params.id });
 
-  res.json(ApiResponse.success(null, 'Department deactivated successfully'));
+  if (employeeCount > 0) {
+    throw ApiError.badRequest(`Cannot delete department. ${employeeCount} employee(s) are assigned to this department.`);
+  }
+
+  // Hard delete the department
+  await Department.findByIdAndDelete(req.params.id);
+
+  res.json(ApiResponse.success(null, 'Department deleted successfully'));
 });
 
 export const getDepartmentEmployees = asyncHandler(async (req, res) => {

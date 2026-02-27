@@ -1,6 +1,48 @@
 import api from './api';
 
 export const attendanceService = {
+  // Employee self-service
+  async checkIn() {
+    const response = await api.post('/attendance/check-in');
+    return response.data;
+  },
+
+  async checkOut() {
+    const response = await api.post('/attendance/check-out');
+    return response.data;
+  },
+
+  async startLunch() {
+    const response = await api.post('/attendance/lunch-start');
+    return response.data;
+  },
+
+  async endLunch() {
+    const response = await api.post('/attendance/lunch-end');
+    return response.data;
+  },
+
+  async startBreak(reason = '') {
+    const response = await api.post('/attendance/break-start', { reason });
+    return response.data;
+  },
+
+  async endBreak() {
+    const response = await api.post('/attendance/break-end');
+    return response.data;
+  },
+
+  async getMyStatus() {
+    const response = await api.get('/attendance/my-status');
+    return response.data;
+  },
+
+  async getMyHistory(params = {}) {
+    const response = await api.get('/attendance/my-history', { params });
+    return response.data;
+  },
+
+  // Admin/HR endpoints
   async getAll(params = {}) {
     const response = await api.get('/attendance', { params });
     return response.data;

@@ -1,9 +1,9 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
 import { ProtectedRoute } from './components/auth';
-import { Login, Register } from './components/auth';
+import { Login } from './components/auth';
 import { MainLayout } from './components/layout';
-import { Dashboard, PlaceholderPage, Departments, Employees, EmployeeDetail, Attendance, Leaves } from './pages';
+import { Dashboard, PlaceholderPage, Departments, Employees, EmployeeDetail, Attendance, Leaves, Onboarding, Payroll, Reports } from './pages';
 import { LoadingSpinner } from './components/common';
 
 function App() {
@@ -19,14 +19,10 @@ function App() {
 
   return (
     <Routes>
-      {/* Public routes */}
+      {/* Public routes - Login only, no public registration */}
       <Route
         path="/login"
         element={user ? <Navigate to="/dashboard" replace /> : <Login />}
-      />
-      <Route
-        path="/register"
-        element={user ? <Navigate to="/dashboard" replace /> : <Register />}
       />
 
       {/* Protected routes */}
@@ -40,21 +36,61 @@ function App() {
       >
         <Route index element={<Navigate to="/dashboard" replace />} />
         <Route path="dashboard" element={<Dashboard />} />
-        <Route path="employees" element={<Employees />} />
-        <Route path="employees/:id" element={<EmployeeDetail />} />
-        <Route path="departments" element={<Departments />} />
+
+        {/* Admin/HR only routes */}
+        <Route
+          path="employees"
+          element={
+            <ProtectedRoute allowedRoles={['admin', 'hr']}>
+              <Employees />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="employees/:id"
+          element={
+            <ProtectedRoute allowedRoles={['admin', 'hr']}>
+              <EmployeeDetail />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="departments"
+          element={
+            <ProtectedRoute allowedRoles={['admin', 'hr']}>
+              <Departments />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Attendance - all roles (employees see their own) */}
         <Route path="attendance" element={<Attendance />} />
+
+        {/* Leaves - all roles (employees see their own) */}
         <Route path="leaves" element={<Leaves />} />
+
+        {/* Admin/HR only routes */}
         <Route
           path="onboarding"
           element={
             <ProtectedRoute allowedRoles={['admin', 'hr']}>
-              <PlaceholderPage title="Onboarding" />
+              <Onboarding />
             </ProtectedRoute>
           }
         />
-        <Route path="payroll" element={<PlaceholderPage title="Payroll" />} />
-        <Route path="reports" element={<PlaceholderPage title="Reports" />} />
+
+        {/* Payroll - all roles (employees see payslips only) */}
+        <Route path="payroll" element={<Payroll />} />
+
+        {/* Admin/HR only routes */}
+        <Route
+          path="reports"
+          element={
+            <ProtectedRoute allowedRoles={['admin', 'hr']}>
+              <Reports />
+            </ProtectedRoute>
+          }
+        />
       </Route>
 
       {/* Catch all route */}

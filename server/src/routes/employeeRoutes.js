@@ -20,11 +20,23 @@ const createValidation = [
   body('firstName').trim().notEmpty().withMessage('First name is required'),
   body('lastName').trim().notEmpty().withMessage('Last name is required'),
   body('email').isEmail().withMessage('Valid email is required'),
+  body('password')
+    .optional({ values: 'falsy' })
+    .isLength({ min: 6 })
+    .withMessage('Password must be at least 6 characters'),
+  body('role')
+    .optional()
+    .isIn(['admin', 'hr', 'employee'])
+    .withMessage('Valid role is required (admin, hr, or employee)'),
   body('department').isMongoId().withMessage('Valid department is required'),
   body('designation').trim().notEmpty().withMessage('Designation is required'),
   body('dateOfJoining').isISO8601().withMessage('Valid date of joining is required'),
   body('employmentType').optional().isIn(['full-time', 'part-time', 'contract']),
   body('salary.basic').optional().isFloat({ min: 0 }),
+  // Bank details validation
+  body('bankDetails.bankName').if(body('bankDetails').exists()).notEmpty().withMessage('Bank name is required'),
+  body('bankDetails.accountNo').if(body('bankDetails').exists()).notEmpty().withMessage('Account number is required'),
+  body('bankDetails.ifsc').if(body('bankDetails').exists()).notEmpty().withMessage('IFSC code is required'),
   validate,
 ];
 
@@ -35,6 +47,14 @@ const updateValidation = [
   body('email').optional().isEmail(),
   body('department').optional().isMongoId(),
   body('designation').optional().trim().notEmpty(),
+  body('role')
+    .optional()
+    .isIn(['admin', 'hr', 'employee'])
+    .withMessage('Valid role is required (admin, hr, or employee)'),
+  body('password')
+    .optional()
+    .isLength({ min: 6 })
+    .withMessage('Password must be at least 6 characters'),
   validate,
 ];
 

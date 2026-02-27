@@ -1,4 +1,6 @@
 import User from '../models/User.js';
+import Employee from '../models/Employee.js';
+import Department from '../models/Department.js';
 import ApiError from '../utils/ApiError.js';
 import ApiResponse from '../utils/ApiResponse.js';
 import asyncHandler from '../utils/asyncHandler.js';
@@ -7,8 +9,8 @@ import authService from '../services/authService.js';
 export const register = asyncHandler(async (req, res) => {
   const { email, password, role } = req.body;
 
-  // Check if user exists
-  const existingUser = await User.findOne({ email });
+  // Check if user exists (case-insensitive email check)
+  const existingUser = await User.findOne({ email: email?.toLowerCase() });
   if (existingUser) {
     throw ApiError.conflict('User already exists with this email');
   }
@@ -19,6 +21,39 @@ export const register = asyncHandler(async (req, res) => {
     password,
     role: role || 'employee',
   });
+
+  // If role is employee, create an Employee profile
+  if (user.role === 'employee') {
+    // Find or create a default department
+    let defaultDept = await Department.findOne({ code: 'GENERAL' });
+    if (!defaultDept) {
+      defaultDept = await Department.create({
+        name: 'General',
+        code: 'GENERAL',
+        description: 'Default department for employees',
+      });
+    }
+
+    // Generate employee ID
+    const employeeCount = await Employee.countDocuments();
+    const employeeId = `EMP${String(employeeCount + 1).padStart(4, '0')}`;
+
+    // Create employee profile
+    const employee = await Employee.create({
+      employeeId,
+      firstName: email.split('@')[0],
+      lastName: 'User',
+      email: email.toLowerCase(),
+      department: defaultDept._id,
+      designation: 'Employee',
+      dateOfJoining: new Date(),
+      userId: user._id,
+    });
+
+    // Link employee to user
+    user.employeeId = employee._id;
+    await user.save();
+  }
 
   // Generate tokens
   const accessToken = authService.generateAccessToken(user);
@@ -31,6 +66,9 @@ export const register = asyncHandler(async (req, res) => {
   // Set cookie
   res.cookie('refreshToken', refreshToken, authService.getCookieOptions());
 
+  // Populate employeeId for response
+  await user.populate('employeeId');
+
   res.status(201).json(
     ApiResponse.created(
       {
@@ -38,6 +76,7 @@ export const register = asyncHandler(async (req, res) => {
           id: user._id,
           email: user.email,
           role: user.role,
+          employeeId: user.employeeId,
         },
         accessToken,
       },
@@ -49,8 +88,8 @@ export const register = asyncHandler(async (req, res) => {
 export const login = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
-  // Find user with password
-  const user = await User.findOne({ email }).select('+password');
+  // Find user with password (email is case-insensitive)
+  const user = await User.findOne({ email: email?.toLowerCase() }).select('+password');
   if (!user) {
     throw ApiError.unauthorized('Invalid credentials');
   }
@@ -60,8 +99,8 @@ export const login = asyncHandler(async (req, res) => {
     throw ApiError.unauthorized('Account is deactivated');
   }
 
-  // Compare password
-  const isMatch = await user.comparePassword(password);
+  // Compare password (trim to handle whitespace)
+  const isMatch = await user.comparePassword(password?.trim());
   if (!isMatch) {
     throw ApiError.unauthorized('Invalid credentials');
   }
@@ -77,6 +116,9 @@ export const login = asyncHandler(async (req, res) => {
   // Set cookie
   res.cookie('refreshToken', refreshToken, authService.getCookieOptions());
 
+  // Populate employeeId
+  await user.populate('employeeId');
+
   res.json(
     ApiResponse.success(
       {
@@ -84,6 +126,7 @@ export const login = asyncHandler(async (req, res) => {
           id: user._id,
           email: user.email,
           role: user.role,
+          employeeId: user.employeeId,
         },
         accessToken,
       },

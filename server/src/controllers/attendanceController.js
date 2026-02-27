@@ -1,8 +1,363 @@
 import Attendance from '../models/Attendance.js';
 import Employee from '../models/Employee.js';
+import User from '../models/User.js';
 import ApiError from '../utils/ApiError.js';
 import ApiResponse from '../utils/ApiResponse.js';
 import asyncHandler from '../utils/asyncHandler.js';
+
+// Helper to get employee from user
+const getEmployeeFromUser = async (userId) => {
+  const user = await User.findById(userId);
+  if (!user || !user.employeeId) {
+    return null;
+  }
+  return await Employee.findById(user.employeeId);
+};
+
+// Helper to get or create today's attendance record
+const getOrCreateTodayRecord = async (employeeId) => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  let attendance = await Attendance.findOne({
+    employee: employeeId,
+    date: {
+      $gte: today,
+      $lt: new Date(today.getTime() + 24 * 60 * 60 * 1000),
+    },
+  });
+
+  if (!attendance) {
+    attendance = new Attendance({
+      employee: employeeId,
+      date: today,
+      status: 'pending',
+      currentState: 'not_checked_in',
+      workSessions: [],
+      personalBreaks: [],
+    });
+  }
+
+  return attendance;
+};
+
+// ============ Employee Self-Service Endpoints ============
+
+// Check in (start work)
+export const checkIn = asyncHandler(async (req, res) => {
+  const employee = await getEmployeeFromUser(req.user._id);
+  if (!employee) {
+    throw ApiError.notFound('Employee profile not found');
+  }
+
+  const attendance = await getOrCreateTodayRecord(employee._id);
+  const now = new Date();
+
+  if (attendance.currentState === 'working') {
+    throw ApiError.badRequest('Already checked in. Please check out first.');
+  }
+
+  if (attendance.currentState === 'checked_out') {
+    throw ApiError.badRequest('Already checked out for today.');
+  }
+
+  // Start a new work session
+  const session = { checkIn: now, duration: 0 };
+  attendance.workSessions.push(session);
+
+  // Update state
+  attendance.currentState = 'working';
+  attendance.status = 'working';
+
+  // Update legacy checkIn field for first session
+  if (attendance.workSessions.length === 1) {
+    attendance.checkIn = now;
+  }
+
+  await attendance.save();
+
+  res.json(
+    ApiResponse.success({
+      attendance,
+      message: 'Checked in successfully',
+    })
+  );
+});
+
+// Check out (end work)
+export const checkOut = asyncHandler(async (req, res) => {
+  const employee = await getEmployeeFromUser(req.user._id);
+  if (!employee) {
+    throw ApiError.notFound('Employee profile not found');
+  }
+
+  const attendance = await getOrCreateTodayRecord(employee._id);
+  const now = new Date();
+
+  if (attendance.currentState === 'not_checked_in') {
+    throw ApiError.badRequest('Not checked in yet.');
+  }
+
+  if (attendance.currentState === 'checked_out') {
+    throw ApiError.badRequest('Already checked out for today.');
+  }
+
+  if (attendance.currentState === 'lunch_break') {
+    throw ApiError.badRequest('Please end your lunch break before checking out.');
+  }
+
+  if (attendance.currentState === 'personal_break') {
+    throw ApiError.badRequest('Please end your personal break before checking out.');
+  }
+
+  // End the current work session
+  const currentSession = attendance.workSessions[attendance.workSessions.length - 1];
+  if (currentSession && !currentSession.checkOut) {
+    currentSession.checkOut = now;
+  }
+
+  // Update state
+  attendance.currentState = 'checked_out';
+  attendance.status = 'present';
+  attendance.checkOut = now;
+
+  // Calculate totals
+  attendance.calculateTotals();
+
+  await attendance.save();
+
+  res.json(
+    ApiResponse.success({
+      attendance,
+      message: 'Checked out successfully',
+    })
+  );
+});
+
+// Start lunch break
+export const startLunch = asyncHandler(async (req, res) => {
+  const employee = await getEmployeeFromUser(req.user._id);
+  if (!employee) {
+    throw ApiError.notFound('Employee profile not found');
+  }
+
+  const attendance = await getOrCreateTodayRecord(employee._id);
+  const now = new Date();
+
+  if (attendance.currentState !== 'working') {
+    throw ApiError.badRequest('Can only start lunch break while working.');
+  }
+
+  // Pause current work session
+  const currentSession = attendance.workSessions[attendance.workSessions.length - 1];
+  if (currentSession && !currentSession.checkOut) {
+    currentSession.checkOut = now;
+  }
+
+  // Start lunch break
+  attendance.lunchBreak = { start: now };
+  attendance.currentState = 'lunch_break';
+
+  await attendance.save();
+
+  res.json(
+    ApiResponse.success({
+      attendance,
+      message: 'Lunch break started',
+    })
+  );
+});
+
+// End lunch break
+export const endLunch = asyncHandler(async (req, res) => {
+  const employee = await getEmployeeFromUser(req.user._id);
+  if (!employee) {
+    throw ApiError.notFound('Employee profile not found');
+  }
+
+  const attendance = await getOrCreateTodayRecord(employee._id);
+  const now = new Date();
+
+  if (attendance.currentState !== 'lunch_break') {
+    throw ApiError.badRequest('Not on lunch break.');
+  }
+
+  // End lunch break
+  attendance.lunchBreak.end = now;
+  if (attendance.lunchBreak.start) {
+    attendance.lunchBreak.duration = Math.round((now - attendance.lunchBreak.start) / (1000 * 60));
+  }
+
+  // Resume work with new session
+  attendance.workSessions.push({ checkIn: now, duration: 0 });
+  attendance.currentState = 'working';
+
+  await attendance.save();
+
+  res.json(
+    ApiResponse.success({
+      attendance,
+      message: 'Lunch break ended',
+    })
+  );
+});
+
+// Start personal break
+export const startBreak = asyncHandler(async (req, res) => {
+  const employee = await getEmployeeFromUser(req.user._id);
+  if (!employee) {
+    throw ApiError.notFound('Employee profile not found');
+  }
+
+  const { reason } = req.body;
+  const attendance = await getOrCreateTodayRecord(employee._id);
+  const now = new Date();
+
+  if (attendance.currentState !== 'working') {
+    throw ApiError.badRequest('Can only start personal break while working.');
+  }
+
+  // Pause current work session
+  const currentSession = attendance.workSessions[attendance.workSessions.length - 1];
+  if (currentSession && !currentSession.checkOut) {
+    currentSession.checkOut = now;
+  }
+
+  // Start personal break
+  attendance.personalBreaks.push({ out: now, reason, duration: 0 });
+  attendance.currentState = 'personal_break';
+
+  await attendance.save();
+
+  res.json(
+    ApiResponse.success({
+      attendance,
+      message: 'Personal break started',
+    })
+  );
+});
+
+// End personal break
+export const endBreak = asyncHandler(async (req, res) => {
+  const employee = await getEmployeeFromUser(req.user._id);
+  if (!employee) {
+    throw ApiError.notFound('Employee profile not found');
+  }
+
+  const attendance = await getOrCreateTodayRecord(employee._id);
+  const now = new Date();
+
+  if (attendance.currentState !== 'personal_break') {
+    throw ApiError.badRequest('Not on personal break.');
+  }
+
+  // End current personal break
+  const currentBreak = attendance.personalBreaks[attendance.personalBreaks.length - 1];
+  if (currentBreak && !currentBreak.in) {
+    currentBreak.in = now;
+    currentBreak.duration = Math.round((now - currentBreak.out) / (1000 * 60));
+  }
+
+  // Resume work with new session
+  attendance.workSessions.push({ checkIn: now, duration: 0 });
+  attendance.currentState = 'working';
+
+  await attendance.save();
+
+  res.json(
+    ApiResponse.success({
+      attendance,
+      message: 'Personal break ended',
+    })
+  );
+});
+
+// Get my current attendance status
+export const getMyStatus = asyncHandler(async (req, res) => {
+  const employee = await getEmployeeFromUser(req.user._id);
+  if (!employee) {
+    throw ApiError.notFound('Employee profile not found');
+  }
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const attendance = await Attendance.findOne({
+    employee: employee._id,
+    date: {
+      $gte: today,
+      $lt: new Date(today.getTime() + 24 * 60 * 60 * 1000),
+    },
+  });
+
+  res.json(
+    ApiResponse.success({
+      employee: {
+        _id: employee._id,
+        firstName: employee.firstName,
+        lastName: employee.lastName,
+        employeeId: employee.employeeId,
+      },
+      attendance: attendance || {
+        currentState: 'not_checked_in',
+        status: 'pending',
+        workSessions: [],
+        personalBreaks: [],
+        totalWorkingMinutes: 0,
+        totalBreakMinutes: 0,
+      },
+    })
+  );
+});
+
+// Get my attendance history
+export const getMyHistory = asyncHandler(async (req, res) => {
+  const employee = await getEmployeeFromUser(req.user._id);
+  if (!employee) {
+    throw ApiError.notFound('Employee profile not found');
+  }
+
+  const { page = 1, limit = 30, month, year } = req.query;
+
+  let startDate, endDate;
+  if (month && year) {
+    startDate = new Date(year, month - 1, 1);
+    endDate = new Date(year, month, 0, 23, 59, 59);
+  } else {
+    // Default to last 30 days
+    endDate = new Date();
+    startDate = new Date();
+    startDate.setDate(startDate.getDate() - 30);
+  }
+
+  const attendance = await Attendance.find({
+    employee: employee._id,
+    date: { $gte: startDate, $lte: endDate },
+  })
+    .populate('employee', 'firstName lastName employeeId department')
+    .sort({ date: -1 })
+    .skip((page - 1) * limit)
+    .limit(parseInt(limit));
+
+  const total = await Attendance.countDocuments({
+    employee: employee._id,
+    date: { $gte: startDate, $lte: endDate },
+  });
+
+  res.json(
+    ApiResponse.success({
+      attendance,
+      pagination: {
+        page: parseInt(page),
+        limit: parseInt(limit),
+        total,
+        pages: Math.ceil(total / limit),
+      },
+    })
+  );
+});
+
+// ============ Admin/HR Endpoints ============
 
 // Get all attendance records with filters
 export const getAllAttendance = asyncHandler(async (req, res) => {

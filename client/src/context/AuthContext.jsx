@@ -37,6 +37,9 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
+      // Clear any existing tokens before login attempt
+      localStorage.removeItem('accessToken');
+
       const response = await authService.login(email, password);
       const { user, accessToken } = response.data;
       localStorage.setItem('accessToken', accessToken);
@@ -45,23 +48,10 @@ export const AuthProvider = ({ children }) => {
       navigate('/dashboard');
       return { success: true };
     } catch (error) {
+      // Clear any tokens on failure
+      localStorage.removeItem('accessToken');
+      setUser(null);
       const message = error.response?.data?.message || 'Login failed';
-      toast.error(message);
-      return { success: false, error: message };
-    }
-  };
-
-  const register = async (email, password, role) => {
-    try {
-      const response = await authService.register(email, password, role);
-      const { user, accessToken } = response.data;
-      localStorage.setItem('accessToken', accessToken);
-      setUser(user);
-      toast.success('Registration successful');
-      navigate('/dashboard');
-      return { success: true };
-    } catch (error) {
-      const message = error.response?.data?.message || 'Registration failed';
       toast.error(message);
       return { success: false, error: message };
     }
@@ -97,7 +87,6 @@ export const AuthProvider = ({ children }) => {
     user,
     loading,
     login,
-    register,
     logout,
     hasRole,
     isAdmin,
