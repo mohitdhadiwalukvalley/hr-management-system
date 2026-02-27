@@ -22,30 +22,27 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  // Check auth in background, don't block initial render
   useEffect(() => {
-    checkAuth();
+    const token = localStorage.getItem('accessToken');
+    if (token && !user) {
+      // Only verify token if we have one but no user data
+      authService.getCurrentUser()
+        .then(response => {
+          const userData = response.data.user;
+          setUser(userData);
+          localStorage.setItem('user', JSON.stringify(userData));
+        })
+        .catch(() => {
+          localStorage.removeItem('accessToken');
+          localStorage.removeItem('user');
+          setUser(null);
+        });
+    }
   }, []);
 
-  const checkAuth = async () => {
-    const token = localStorage.getItem('accessToken');
-    if (token) {
-      setLoading(true);
-      try {
-        const response = await authService.getCurrentUser();
-        const userData = response.data.user;
-        setUser(userData);
-        localStorage.setItem('user', JSON.stringify(userData));
-      } catch (error) {
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('user');
-        setUser(null);
-      } finally {
-        setLoading(false);
-      }
-    }
-  };
-
   const login = useCallback(async (email, password) => {
+    setLoading(true);
     try {
       // Clear any existing tokens before login attempt
       localStorage.removeItem('accessToken');
@@ -67,6 +64,8 @@ export const AuthProvider = ({ children }) => {
       const message = error.response?.data?.message || 'Login failed';
       toast.error(message);
       return { success: false, error: message };
+    } finally {
+      setLoading(false);
     }
   }, [navigate]);
 

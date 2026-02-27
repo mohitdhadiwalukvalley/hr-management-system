@@ -18,7 +18,7 @@ const Onboarding = lazy(() => import('./pages/Onboarding'));
 const Payroll = lazy(() => import('./pages/Payroll'));
 const Reports = lazy(() => import('./pages/Reports'));
 
-// Loading fallback
+// Loading fallback for lazy loaded pages
 const PageLoader = () => (
   <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
     <LoadingSpinner size="lg" />
@@ -26,12 +26,9 @@ const PageLoader = () => (
 );
 
 function App() {
-  const { user, loading } = useAuth();
+  const { user } = useAuth();
 
-  if (loading) {
-    return <PageLoader />;
-  }
-
+  // Don't wait for auth check - show login or dashboard immediately
   return (
     <Suspense fallback={<PageLoader />}>
       <Routes>
