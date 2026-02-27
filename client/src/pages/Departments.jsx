@@ -111,7 +111,7 @@ const Departments = () => {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Departments</h1>
-          <p className="text-sm text-gray-500 mt-1">Manage organizational structure and leave policies</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Manage organizational structure and leave policies</p>
         </div>
         <Button onClick={() => { resetForm(); setShowModal(true); }}>
           <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -124,7 +124,7 @@ const Departments = () => {
       {/* Search */}
       <Card>
         <div className="relative">
-          <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
           </svg>
           <input
@@ -132,9 +132,11 @@ const Departments = () => {
             placeholder="Search departments..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-lg text-sm
+            className="w-full pl-10 pr-4 py-2.5 border border-gray-200 dark:border-gray-600 rounded-lg text-sm
                      focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
-                     hover:border-gray-300 transition-all"
+                     hover:border-gray-300 dark:hover:border-gray-500 transition-all
+                     bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
+                     placeholder-gray-400 dark:placeholder-gray-500"
           />
         </div>
       </Card>
@@ -167,7 +169,7 @@ const Departments = () => {
                     </div>
                     <div>
                       <h3 className="font-semibold text-gray-900 dark:text-gray-100">{dept.name}</h3>
-                      <code className="text-sm text-gray-500 bg-gray-100 px-1.5 py-0.5 rounded">{dept.code}</code>
+                      <code className="text-sm text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5 rounded">{dept.code}</code>
                     </div>
                   </div>
                   <Badge variant={dept.isActive ? 'success' : 'danger'} size="sm">
@@ -176,24 +178,24 @@ const Departments = () => {
                 </div>
 
                 {dept.description && (
-                  <p className="text-sm text-gray-600 mb-4 line-clamp-2">{dept.description}</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-4 line-clamp-2">{dept.description}</p>
                 )}
 
                 {/* Leave Policies */}
-                <div className="bg-gray-50 rounded-lg p-3 mb-4">
-                  <p className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">Leave Policy (days/year)</p>
+                <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 mb-4">
+                  <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">Leave Policy (days/year)</p>
                   <div className="grid grid-cols-3 gap-2">
                     <div className="text-center">
-                      <p className="text-lg font-bold text-blue-600">{dept.leavePolicies?.casual || 0}</p>
-                      <p className="text-xs text-gray-500">Casual</p>
+                      <p className="text-lg font-bold text-blue-600 dark:text-blue-400">{dept.leavePolicies?.casual || 0}</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">Casual</p>
                     </div>
                     <div className="text-center">
-                      <p className="text-lg font-bold text-purple-600">{dept.leavePolicies?.sick || 0}</p>
-                      <p className="text-xs text-gray-500">Sick</p>
+                      <p className="text-lg font-bold text-purple-600 dark:text-purple-400">{dept.leavePolicies?.sick || 0}</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">Sick</p>
                     </div>
                     <div className="text-center">
-                      <p className="text-lg font-bold text-amber-600">{dept.leavePolicies?.earned || 0}</p>
-                      <p className="text-xs text-gray-500">Earned</p>
+                      <p className="text-lg font-bold text-amber-600 dark:text-amber-400">{dept.leavePolicies?.earned || 0}</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">Earned</p>
                     </div>
                   </div>
                 </div>
@@ -265,9 +267,11 @@ const Departments = () => {
             <textarea
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm
+              className="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-600 rounded-lg text-sm
                        focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
-                       hover:border-gray-300 transition-all resize-none"
+                       hover:border-gray-300 dark:hover:border-gray-500 transition-all resize-none
+                       bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100
+                       placeholder-gray-400 dark:placeholder-gray-500"
               rows={3}
               placeholder="Brief description of the department..."
             />
@@ -275,9 +279,9 @@ const Departments = () => {
 
           {/* Leave Policies */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-3">Leave Policy (days/year)</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Leave Policy (days/year)</label>
             <div className="grid grid-cols-3 gap-4">
-              <div className="bg-blue-50 border border-blue-100 rounded-lg p-3">
+              <div className="bg-blue-50 dark:bg-blue-900/30 border border-blue-100 dark:border-blue-800 rounded-lg p-3">
                 <Input
                   label="Casual"
                   type="number"
@@ -289,7 +293,7 @@ const Departments = () => {
                   className="text-center"
                 />
               </div>
-              <div className="bg-purple-50 border border-purple-100 rounded-lg p-3">
+              <div className="bg-purple-50 dark:bg-purple-900/30 border border-purple-100 dark:border-purple-800 rounded-lg p-3">
                 <Input
                   label="Sick"
                   type="number"
@@ -301,7 +305,7 @@ const Departments = () => {
                   className="text-center"
                 />
               </div>
-              <div className="bg-amber-50 border border-amber-100 rounded-lg p-3">
+              <div className="bg-amber-50 dark:bg-amber-900/30 border border-amber-100 dark:border-amber-800 rounded-lg p-3">
                 <Input
                   label="Earned"
                   type="number"

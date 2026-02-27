@@ -132,7 +132,7 @@ const Reports = () => {
                     <td className="px-6 py-4">
                       <div>
                         <p className="font-medium text-gray-900 dark:text-gray-100">{item.employee.name}</p>
-                        <p className="text-sm text-gray-500">{item.employee.department}</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">{item.employee.department}</p>
                       </div>
                     </td>
                     <td className="px-6 py-4 text-center">
@@ -186,7 +186,7 @@ const Reports = () => {
                     <td className="px-6 py-4">
                       <div>
                         <p className="font-medium text-gray-900 dark:text-gray-100">{item.employee.name}</p>
-                        <p className="text-sm text-gray-500">{item.employee.department}</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">{item.employee.department}</p>
                       </div>
                     </td>
                     <td className="px-6 py-4 text-center text-sm">{item.stats.casual}</td>
@@ -243,7 +243,7 @@ const Reports = () => {
                         <p className="font-medium text-gray-900 dark:text-gray-100">
                           {item.employee?.firstName} {item.employee?.lastName}
                         </p>
-                        <p className="text-sm text-gray-500">{item.employee?.department?.name}</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">{item.employee?.department?.name}</p>
                       </div>
                     </td>
                     <td className="px-6 py-4 text-right text-sm">{formatCurrency(item.grossSalary)}</td>
@@ -287,8 +287,8 @@ const Reports = () => {
             <Card title="By Department">
               <div className="space-y-2">
                 {Object.entries(reportData.byDepartment || {}).map(([dept, count]) => (
-                  <div key={dept} className="flex items-center justify-between py-2 border-b border-gray-100 last:border-0">
-                    <span className="text-sm text-gray-700">{dept}</span>
+                  <div key={dept} className="flex items-center justify-between py-2 border-b border-gray-100 dark:border-gray-700 last:border-0">
+                    <span className="text-sm text-gray-700 dark:text-gray-300">{dept}</span>
                     <Badge>{count}</Badge>
                   </div>
                 ))}
@@ -298,8 +298,8 @@ const Reports = () => {
             <Card title="By Employment Type">
               <div className="space-y-2">
                 {Object.entries(reportData.byEmploymentType || {}).map(([type, count]) => (
-                  <div key={type} className="flex items-center justify-between py-2 border-b border-gray-100 last:border-0">
-                    <span className="text-sm text-gray-700 capitalize">{type.replace('-', ' ')}</span>
+                  <div key={type} className="flex items-center justify-between py-2 border-b border-gray-100 dark:border-gray-700 last:border-0">
+                    <span className="text-sm text-gray-700 dark:text-gray-300 capitalize">{type.replace('-', ' ')}</span>
                     <Badge>{count}</Badge>
                   </div>
                 ))}
@@ -320,7 +320,7 @@ const Reports = () => {
               <div className="flex items-start justify-between mb-4">
                 <div>
                   <h3 className="font-semibold text-gray-900 dark:text-gray-100">{dept.name}</h3>
-                  <p className="text-sm text-gray-500">{dept.code}</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">{dept.code}</p>
                 </div>
                 <Badge variant={dept.isActive ? 'success' : 'default'}>
                   {dept.isActive ? 'Active' : 'Inactive'}
@@ -372,7 +372,7 @@ const Reports = () => {
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Reports</h1>
-        <p className="text-sm text-gray-500 mt-1">Generate and view various reports</p>
+        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Generate and view various reports</p>
       </div>
 
       {/* Report Type Selection */}
@@ -384,8 +384,8 @@ const Reports = () => {
               onClick={() => setActiveReport(type.id)}
               className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                 activeReport === type.id
-                  ? 'bg-blue-100 text-blue-700'
-                  : 'text-gray-600 hover:bg-gray-100'
+                  ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400'
+                  : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
               }`}
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
