@@ -88,7 +88,14 @@ const Employees = () => {
         firstName: formData.firstName.trim(),
         lastName: formData.lastName.trim(),
         employeeId: formData.employeeId.trim(),
+        workLocation: formData.workLocation || 'IN',
+        role: formData.role || 'employee',
       };
+
+      // Remove password if editing and password is empty
+      if (editingEmployee && !submitData.password) {
+        delete submitData.password;
+      }
 
       if (editingEmployee) {
         await employeeService.update(editingEmployee._id, submitData);
@@ -129,7 +136,10 @@ const Employees = () => {
       firstName: employee.firstName,
       lastName: employee.lastName,
       email: employee.email,
+      password: '',
+      role: employee.role || 'employee',
       phone: employee.phone || '',
+      workLocation: employee.workLocation || 'IN',
       department: employee.department?._id || employee.department,
       designation: employee.designation,
       dateOfJoining: employee.dateOfJoining?.split('T')[0] || '',
