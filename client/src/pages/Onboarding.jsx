@@ -159,11 +159,11 @@ const Onboarding = () => {
       <Card>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">Status</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Status</label>
             <select
               value={filters.status}
               onChange={(e) => setFilters({ ...filters, status: e.target.value })}
-              className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 hover:border-gray-300 transition-all bg-white dark:bg-gray-900"
+              className="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 hover:border-gray-300 transition-all bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
             >
               <option value="">All Status</option>
               <option value="pending">Pending</option>
@@ -279,11 +279,11 @@ const Onboarding = () => {
       >
         <form onSubmit={handleCreate} className="space-y-5">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">Employee</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Employee</label>
             <select
               value={formData.employee}
               onChange={(e) => setFormData({ ...formData, employee: e.target.value })}
-              className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 hover:border-gray-300 transition-all bg-white dark:bg-gray-900"
+              className="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 hover:border-gray-300 transition-all bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
               required
             >
               <option value="">Select Employee</option>
@@ -296,11 +296,11 @@ const Onboarding = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">Mentor (Optional)</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Mentor (Optional)</label>
             <select
               value={formData.mentor}
               onChange={(e) => setFormData({ ...formData, mentor: e.target.value })}
-              className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 hover:border-gray-300 transition-all bg-white dark:bg-gray-900"
+              className="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 hover:border-gray-300 transition-all bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
             >
               <option value="">Select Mentor</option>
               {employees.map((emp) => (
@@ -312,12 +312,12 @@ const Onboarding = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">Start Date</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Start Date</label>
             <input
               type="date"
               value={formData.startDate}
               onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
-              className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 hover:border-gray-300 transition-all"
+              className="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 hover:border-gray-300 transition-all"
               required
             />
           </div>

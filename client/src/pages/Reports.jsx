@@ -117,16 +117,16 @@ const Reports = () => {
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="bg-gray-50 border-b">
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Employee</th>
-                  <th className="px-6 py-3 text-center text-xs font-semibold text-gray-600 uppercase">Present</th>
-                  <th className="px-6 py-3 text-center text-xs font-semibold text-gray-600 uppercase">Absent</th>
-                  <th className="px-6 py-3 text-center text-xs font-semibold text-gray-600 uppercase">Half Day</th>
-                  <th className="px-6 py-3 text-center text-xs font-semibold text-gray-600 uppercase">WFH</th>
-                  <th className="px-6 py-3 text-center text-xs font-semibold text-gray-600 uppercase">Late</th>
+                <tr className="bg-gray-50 dark:bg-gray-800 border-b">
+                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase">Employee</th>
+                  <th className="px-6 py-3 text-center text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase">Present</th>
+                  <th className="px-6 py-3 text-center text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase">Absent</th>
+                  <th className="px-6 py-3 text-center text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase">Half Day</th>
+                  <th className="px-6 py-3 text-center text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase">WFH</th>
+                  <th className="px-6 py-3 text-center text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase">Late</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100">
+              <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
                 {reportData.report.map((item) => (
                   <tr key={item.employee._id} className="hover:bg-gray-50 dark:bg-gray-800">
                     <td className="px-6 py-4">
@@ -171,16 +171,16 @@ const Reports = () => {
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="bg-gray-50 border-b">
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Employee</th>
-                  <th className="px-6 py-3 text-center text-xs font-semibold text-gray-600 uppercase">Casual</th>
-                  <th className="px-6 py-3 text-center text-xs font-semibold text-gray-600 uppercase">Sick</th>
-                  <th className="px-6 py-3 text-center text-xs font-semibold text-gray-600 uppercase">Earned</th>
-                  <th className="px-6 py-3 text-center text-xs font-semibold text-gray-600 uppercase">Total Approved</th>
-                  <th className="px-6 py-3 text-center text-xs font-semibold text-gray-600 uppercase">Pending</th>
+                <tr className="bg-gray-50 dark:bg-gray-800 border-b">
+                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase">Employee</th>
+                  <th className="px-6 py-3 text-center text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase">Casual</th>
+                  <th className="px-6 py-3 text-center text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase">Sick</th>
+                  <th className="px-6 py-3 text-center text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase">Earned</th>
+                  <th className="px-6 py-3 text-center text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase">Total Approved</th>
+                  <th className="px-6 py-3 text-center text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase">Pending</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100">
+              <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
                 {reportData.report.map((item) => (
                   <tr key={item.employee._id} className="hover:bg-gray-50 dark:bg-gray-800">
                     <td className="px-6 py-4">
@@ -227,15 +227,15 @@ const Reports = () => {
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="bg-gray-50 border-b">
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Employee</th>
-                  <th className="px-6 py-3 text-right text-xs font-semibold text-gray-600 uppercase">Gross</th>
-                  <th className="px-6 py-3 text-right text-xs font-semibold text-gray-600 uppercase">Deductions</th>
-                  <th className="px-6 py-3 text-right text-xs font-semibold text-gray-600 uppercase">Net</th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Status</th>
+                <tr className="bg-gray-50 dark:bg-gray-800 border-b">
+                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase">Employee</th>
+                  <th className="px-6 py-3 text-right text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase">Gross</th>
+                  <th className="px-6 py-3 text-right text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase">Deductions</th>
+                  <th className="px-6 py-3 text-right text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase">Net</th>
+                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase">Status</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100">
+              <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
                 {reportData.payroll.map((item) => (
                   <tr key={item._id} className="hover:bg-gray-50 dark:bg-gray-800">
                     <td className="px-6 py-4">
@@ -403,11 +403,11 @@ const Reports = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {activeReport !== 'leaves' && (
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">Month</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Month</label>
                 <select
                   value={filters.month}
                   onChange={(e) => setFilters({ ...filters, month: parseInt(e.target.value) })}
-                  className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 hover:border-gray-300 transition-all bg-white dark:bg-gray-900"
+                  className="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 hover:border-gray-300 transition-all bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
                 >
                   {months.map((m) => (
                     <option key={m.value} value={m.value}>{m.label}</option>
@@ -416,11 +416,11 @@ const Reports = () => {
               </div>
             )}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">Year</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Year</label>
               <select
                 value={filters.year}
                 onChange={(e) => setFilters({ ...filters, year: parseInt(e.target.value) })}
-                className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 hover:border-gray-300 transition-all bg-white dark:bg-gray-900"
+                className="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 hover:border-gray-300 transition-all bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
               >
                 {[2024, 2025, 2026].map((y) => (
                   <option key={y} value={y}>{y}</option>

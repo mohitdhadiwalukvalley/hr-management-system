@@ -239,13 +239,13 @@ const Leaves = () => {
       <Card>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">Status</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Status</label>
             <select
               value={filters.status}
               onChange={(e) => setFilters({ ...filters, status: e.target.value })}
               className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm
                        focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
-                       hover:border-gray-300 transition-all bg-white dark:bg-gray-900"
+                       hover:border-gray-300 transition-all bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
             >
               <option value="">All Status</option>
               <option value="pending">Pending</option>
@@ -255,13 +255,13 @@ const Leaves = () => {
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">Leave Type</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Leave Type</label>
             <select
               value={filters.leaveType}
               onChange={(e) => setFilters({ ...filters, leaveType: e.target.value })}
               className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm
                        focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
-                       hover:border-gray-300 transition-all bg-white dark:bg-gray-900"
+                       hover:border-gray-300 transition-all bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
             >
               <option value="">All Types</option>
               <option value="casual">Casual</option>
@@ -271,13 +271,13 @@ const Leaves = () => {
           </div>
           {isAdminOrHR() && (
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">Employee</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Employee</label>
               <select
                 value={filters.employee}
                 onChange={(e) => setFilters({ ...filters, employee: e.target.value })}
                 className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm
                          focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
-                         hover:border-gray-300 transition-all bg-white dark:bg-gray-900"
+                         hover:border-gray-300 transition-all bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
               >
                 <option value="">All Employees</option>
                 {employees.map((emp) => (
@@ -296,16 +296,16 @@ const Leaves = () => {
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="bg-gray-50 border-b border-gray-100 dark:border-gray-700">
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Employee</th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Type</th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Dates</th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Days</th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Status</th>
-                <th className="px-6 py-4 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">Actions</th>
+              <tr className="bg-gray-50 dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700 dark:border-gray-700">
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Employee</th>
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Type</th>
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Dates</th>
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Days</th>
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Status</th>
+                <th className="px-6 py-4 text-right text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100">
+            <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
               {leaves.length === 0 ? (
                 <tr>
                   <td colSpan="6" className="px-6 py-12">
@@ -322,7 +322,7 @@ const Leaves = () => {
                 </tr>
               ) : (
                 leaves.map((leave) => (
-                  <tr key={leave._id} className="hover:bg-gray-50 transition-colors">
+                  <tr key={leave._id} className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
                         <Avatar
@@ -398,7 +398,7 @@ const Leaves = () => {
         <form onSubmit={handleApplyLeave} className="space-y-5">
           {isAdminOrHR() && (
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">Employee</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Employee</label>
               <select
                 value={formData.employee}
                 onChange={(e) => {
@@ -407,7 +407,7 @@ const Leaves = () => {
                 }}
                 className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm
                          focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
-                         hover:border-gray-300 transition-all bg-white dark:bg-gray-900"
+                         hover:border-gray-300 transition-all bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
                 required
               >
                 <option value="">Select Employee</option>
@@ -420,13 +420,13 @@ const Leaves = () => {
             </div>
           )}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">Leave Type</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Leave Type</label>
             <select
               value={formData.leaveType}
               onChange={(e) => setFormData({ ...formData, leaveType: e.target.value })}
               className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm
                        focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
-                       hover:border-gray-300 transition-all bg-white dark:bg-gray-900"
+                       hover:border-gray-300 transition-all bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
             >
               <option value="casual">Casual</option>
               <option value="sick">Sick</option>
@@ -467,7 +467,7 @@ const Leaves = () => {
             <span className="text-sm text-gray-700">Half Day</span>
           </label>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">Reason</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Reason</label>
             <textarea
               value={formData.reason}
               onChange={(e) => setFormData({ ...formData, reason: e.target.value })}
@@ -500,7 +500,7 @@ const Leaves = () => {
       >
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">Rejection Reason</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Rejection Reason</label>
             <textarea
               value={rejectionReason}
               onChange={(e) => setRejectionReason(e.target.value)}

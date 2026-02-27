@@ -228,13 +228,13 @@ const Attendance = () => {
             onChange={(e) => setFilters({ ...filters, endDate: e.target.value })}
           />
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">Department</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Department</label>
             <select
               value={filters.department}
               onChange={(e) => setFilters({ ...filters, department: e.target.value })}
               className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm
                        focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
-                       hover:border-gray-300 transition-all bg-white dark:bg-gray-900"
+                       hover:border-gray-300 transition-all bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
             >
               <option value="">All Departments</option>
               {departments.map((dept) => (
@@ -243,13 +243,13 @@ const Attendance = () => {
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">Status</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Status</label>
             <select
               value={filters.status}
               onChange={(e) => setFilters({ ...filters, status: e.target.value })}
               className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm
                        focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
-                       hover:border-gray-300 transition-all bg-white dark:bg-gray-900"
+                       hover:border-gray-300 transition-all bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
             >
               <option value="">All Status</option>
               <option value="present">Present</option>
@@ -266,17 +266,17 @@ const Attendance = () => {
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="bg-gray-50 border-b border-gray-100 dark:border-gray-700">
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Date</th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Employee</th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Status</th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Check In</th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Check Out</th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Work Hours</th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Notes</th>
+              <tr className="bg-gray-50 dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700 dark:border-gray-700">
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Date</th>
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Employee</th>
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Status</th>
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Check In</th>
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Check Out</th>
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Work Hours</th>
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Notes</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100">
+            <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
               {attendance.length === 0 ? (
                 <tr>
                   <td colSpan="7" className="px-6 py-12">
@@ -293,7 +293,7 @@ const Attendance = () => {
                 </tr>
               ) : (
                 attendance.map((record) => (
-                  <tr key={record._id} className="hover:bg-gray-50 transition-colors">
+                  <tr key={record._id} className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
                     <td className="px-6 py-4">
                       <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
                         {new Date(record.date).toLocaleDateString('en-US', {
@@ -356,13 +356,13 @@ const Attendance = () => {
       >
         <form onSubmit={handleMarkAttendance} className="space-y-5">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">Employee</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Employee</label>
             <select
               value={markingData.employee}
               onChange={(e) => setMarkingData({ ...markingData, employee: e.target.value })}
               className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm
                        focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
-                       hover:border-gray-300 transition-all bg-white dark:bg-gray-900"
+                       hover:border-gray-300 transition-all bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
               required
             >
               <option value="">Select Employee</option>
@@ -381,13 +381,13 @@ const Attendance = () => {
             required
           />
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">Status</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Status</label>
             <select
               value={markingData.status}
               onChange={(e) => setMarkingData({ ...markingData, status: e.target.value })}
               className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm
                        focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
-                       hover:border-gray-300 transition-all bg-white dark:bg-gray-900"
+                       hover:border-gray-300 transition-all bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
             >
               <option value="present">Present</option>
               <option value="absent">Absent</option>
@@ -410,7 +410,7 @@ const Attendance = () => {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">Notes</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Notes</label>
             <textarea
               value={markingData.notes}
               onChange={(e) => setMarkingData({ ...markingData, notes: e.target.value })}

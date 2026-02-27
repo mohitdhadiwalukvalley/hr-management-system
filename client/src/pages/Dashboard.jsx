@@ -481,7 +481,7 @@ const Dashboard = () => {
                 <th className="text-left py-3 px-4 text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Break Time</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100">
+            <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
               {employeeAttendanceData.slice(0, 10).map((emp) => (
                 <tr key={emp._id} className="hover:bg-gray-50 dark:bg-gray-800 transition-colors">
                   <td className="py-3 px-4">
