@@ -11,11 +11,13 @@ const Dashboard = () => {
     totalEmployees: 0,
     departments: 0,
     presentToday: 0,
+    absentToday: 0,
     pendingLeaves: 0,
   });
   const [recentLeaves, setRecentLeaves] = useState([]);
   const [departments, setDepartments] = useState([]);
   const [myLeaves, setMyLeaves] = useState([]);
+  const [myPendingLeavesCount, setMyPendingLeavesCount] = useState(0);
   const [todayAttendance, setTodayAttendance] = useState([]);
   const [allEmployees, setAllEmployees] = useState([]);
 
@@ -56,17 +58,23 @@ const Dashboard = () => {
           totalEmployees: employees.length,
           departments: depts.length,
           presentToday: attendance.filter(a => a.status === 'present' || a.status === 'working' || a.currentState === 'working').length,
+          absentToday: employees.length - attendance.filter(a => a.checkIn || a.currentState).length,
           pendingLeaves: leaves.length,
         });
       } else {
         // Employee: Fetch only own data
-        const [leavesRes] = await Promise.allSettled([
+        const [leavesRes, allLeavesRes] = await Promise.allSettled([
           leaveService.getAll({ status: 'pending' }),
+          leaveService.getMyLeaves(),
         ]);
 
         // Process own leaves
         const leaves = leavesRes.status === 'fulfilled' ? leavesRes.value.data?.data || [] : [];
         setMyLeaves(leaves.slice(0, 3));
+
+        // Get pending leaves count for employee
+        const myLeavesData = allLeavesRes.status === 'fulfilled' ? allLeavesRes.value.data?.data || [] : [];
+        setMyPendingLeavesCount(myLeavesData.filter(l => l.status === 'pending').length);
       }
     } catch (error) {
       console.error('Error fetching dashboard data:', error);
@@ -251,6 +259,40 @@ const Dashboard = () => {
         {/* Attendance Widget - Most important for employees */}
         <AttendanceWidget />
 
+        {/* Employee Stats */}
+        <div className="grid grid-cols-2 gap-4">
+          <div className="bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-900/30 dark:to-orange-900/30 rounded-xl p-4 border border-amber-100 dark:border-amber-800">
+            <div className="flex items-center justify-between">
+              <div>
+                <div className="text-xs text-amber-600 dark:text-amber-400 font-medium uppercase tracking-wide">Pending Leaves</div>
+                <div className="text-2xl font-bold text-amber-700 dark:text-amber-300 mt-1">
+                  {myPendingLeavesCount}
+                </div>
+              </div>
+              <div className="w-10 h-10 bg-amber-100 dark:bg-amber-800 rounded-lg flex items-center justify-center">
+                <svg className="w-5 h-5 text-amber-600 dark:text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                </svg>
+              </div>
+            </div>
+          </div>
+          <div className="bg-gradient-to-br from-emerald-50 to-green-50 dark:from-emerald-900/30 dark:to-green-900/30 rounded-xl p-4 border border-emerald-100 dark:border-emerald-800">
+            <div className="flex items-center justify-between">
+              <div>
+                <div className="text-xs text-emerald-600 dark:text-emerald-400 font-medium uppercase tracking-wide">Leave Balance</div>
+                <div className="text-2xl font-bold text-emerald-700 dark:text-emerald-300 mt-1">
+                  {user?.leaveBalance || 12}
+                </div>
+              </div>
+              <div className="w-10 h-10 bg-emerald-100 dark:bg-emerald-800 rounded-lg flex items-center justify-center">
+                <svg className="w-5 h-5 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Quick Actions for Employee */}
         <Card>
           <div className="flex items-center justify-between mb-4">
@@ -276,7 +318,7 @@ const Dashboard = () => {
         <Card>
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">My Leave Requests</h2>
-            <a href="/leaves" className="text-sm text-blue-600 hover:text-blue-700 font-medium">
+            <a href="/leaves" className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium">
               View all
             </a>
           </div>
@@ -380,14 +422,14 @@ const Dashboard = () => {
           color="emerald"
         />
         <StatsCard
-          title="Pending Leaves"
-          value={stats.pendingLeaves}
+          title="Absent Today"
+          value={stats.absentToday}
           icon={
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
             </svg>
           }
-          color="amber"
+          color="red"
         />
         <StatsCard
           title="Departments"
@@ -429,42 +471,42 @@ const Dashboard = () => {
       <Card>
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Today's Attendance</h2>
-          <a href="/attendance" className="text-sm text-blue-600 hover:text-blue-700 font-medium">
+          <a href="/attendance" className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium">
             View Details
           </a>
         </div>
 
         {/* Summary Stats */}
         <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 mb-4">
-          <div className="bg-green-50 rounded-lg p-3 text-center">
-            <div className="text-2xl font-bold text-green-600">
+          <div className="bg-green-50 dark:bg-green-900/30 rounded-lg p-3 text-center">
+            <div className="text-2xl font-bold text-green-600 dark:text-green-400">
               {employeeAttendanceData.filter(e => e.attendance?.currentState === 'working').length}
             </div>
-            <div className="text-xs text-green-700">Working</div>
+            <div className="text-xs text-green-700 dark:text-green-300">Working</div>
           </div>
-          <div className="bg-amber-50 rounded-lg p-3 text-center">
-            <div className="text-2xl font-bold text-amber-600">
+          <div className="bg-amber-50 dark:bg-amber-900/30 rounded-lg p-3 text-center">
+            <div className="text-2xl font-bold text-amber-600 dark:text-amber-400">
               {employeeAttendanceData.filter(e => ['lunch_break', 'personal_break'].includes(e.attendance?.currentState)).length}
             </div>
-            <div className="text-xs text-amber-700">On Break</div>
+            <div className="text-xs text-amber-700 dark:text-amber-300">On Break</div>
           </div>
-          <div className="bg-blue-50 rounded-lg p-3 text-center">
-            <div className="text-2xl font-bold text-blue-600">
+          <div className="bg-blue-50 dark:bg-blue-900/30 rounded-lg p-3 text-center">
+            <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
               {employeeAttendanceData.filter(e => e.attendance?.currentState === 'checked_out').length}
             </div>
-            <div className="text-xs text-blue-700">Checked Out</div>
+            <div className="text-xs text-blue-700 dark:text-blue-300">Checked Out</div>
           </div>
-          <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-3 text-center">
+          <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 text-center">
             <div className="text-2xl font-bold text-gray-600 dark:text-gray-300">
               {employeeAttendanceData.filter(e => !e.attendance || e.attendance?.currentState === 'not_checked_in').length}
             </div>
-            <div className="text-xs text-gray-700">Not Checked In</div>
+            <div className="text-xs text-gray-700 dark:text-gray-300">Not Checked In</div>
           </div>
-          <div className="bg-purple-50 rounded-lg p-3 text-center">
-            <div className="text-2xl font-bold text-purple-600">
+          <div className="bg-purple-50 dark:bg-purple-900/30 rounded-lg p-3 text-center">
+            <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">
               {employeeAttendanceData.filter(e => e.attendance?.checkIn).length}
             </div>
-            <div className="text-xs text-purple-700">Total Present</div>
+            <div className="text-xs text-purple-700 dark:text-purple-300">Total Present</div>
           </div>
         </div>
 
@@ -541,7 +583,7 @@ const Dashboard = () => {
 
         {employeeAttendanceData.length > 10 && (
           <div className="mt-4 text-center">
-            <a href="/attendance" className="text-sm text-blue-600 hover:text-blue-700 font-medium">
+            <a href="/attendance" className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium">
               View all {employeeAttendanceData.length} employees →
             </a>
           </div>
@@ -563,7 +605,7 @@ const Dashboard = () => {
         <Card>
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Pending Leave Requests</h2>
-            <a href="/leaves" className="text-sm text-blue-600 hover:text-blue-700 font-medium">
+            <a href="/leaves" className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium">
               View all
             </a>
           </div>
@@ -605,7 +647,7 @@ const Dashboard = () => {
         <Card>
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Department Overview</h2>
-            <a href="/departments" className="text-sm text-blue-600 hover:text-blue-700 font-medium">
+            <a href="/departments" className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium">
               View all
             </a>
           </div>
