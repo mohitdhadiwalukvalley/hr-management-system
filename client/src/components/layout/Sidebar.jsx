@@ -147,7 +147,7 @@ const Sidebar = ({ isOpen, onClose }) => {
               </p>
               <p className="text-xs capitalize text-gray-500 dark:text-gray-400">{user?.role}</p>
             </div>
-            <svg className="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="w-4 h-4 text-gray-400 dark:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
             </svg>
           </div>
