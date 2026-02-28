@@ -15,6 +15,10 @@ build/
 .env.production.local
 *.env
 
+# But allow .env.example files
+!.env.example
+!.env.example.local
+
 # Logs
 logs
 *.log
